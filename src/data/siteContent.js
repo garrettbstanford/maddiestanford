@@ -1,3 +1,7 @@
+import busQuoteList from "../assets/bus-quote-list.png";
+import mondayCom from "../assets/monday-com.png";
+import cwaServiceCrew from "../assets/cwa-service-crew.jpg";
+
 export const navLinks = [
   { label: "Home", href: "/" },
   {
@@ -85,7 +89,36 @@ export const portfolioPages = {
       "Executive retreats, launch nights, keynote stages, and hospitality suites designed to feel elevated, intentional, and true to brand voice.",
     image:
       "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&q=80",
-    highlights: ["Executive Retreats", "Brand Activations", "Conference Styling"]
+    highlights: ["Executive Retreats", "Brand Activations", "Conference Styling"],
+    sections: ["Bus Quotes", "Monday.com", "Sponsor Blitz", "CWA Service Crew Flyer", "RFP"],
+    mediaSections: [
+      {
+        title: "Bus Quotes",
+        image: busQuoteList,
+        alt: "Bus Quote List document preview",
+        description: "Describe  why this proposal made an impact/ how much money i saved the company. Share any other additional info I want/need"
+      },
+      {
+        title: "Monday.com",
+        image: mondayCom,
+        alt: "Monday.com document preview",
+        description:
+          "Describe why monday.com hasmade an impact/ how much I have used it/ can use it. Share any other additional info I want/need"
+      },
+      {
+        title: "CWA Service Crew",
+        image: cwaServiceCrew,
+        alt: "CWA Service Crew graphic preview",
+        description:
+          "Describe why this graphic was important and how it has impact. Share any other additional info I want/need"
+      },
+      {
+        title: "RFP"
+      },
+      {
+        title: "Sponsor Blitz"
+      }
+    ]
   },
   "/portfolio/community": {
     kicker: "Portfolio / Community",

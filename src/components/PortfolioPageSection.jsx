@@ -2,8 +2,7 @@ import { ArrowUpRight } from "lucide-react";
 
 export default function PortfolioPageSection({ page }) {
   return (
-    <section className="relative flex min-h-screen items-end overflow-hidden bg-stone-900">
-      <img src={page.image} alt={`${page.title} portfolio preview`} className="absolute inset-0 h-full w-full object-cover" loading="eager" />
+    <section className="relative min-h-screen overflow-hidden bg-stone-900">
       <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/45 to-black/20" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(255,255,255,0.2),transparent_45%)]" />
 
@@ -30,6 +29,52 @@ export default function PortfolioPageSection({ page }) {
             </span>
           ))}
         </div>
+
+        {page.sections ? (
+          <div className="reveal mt-10 translate-y-8 opacity-0" style={{ transitionDelay: "0.15s" }}>
+            <h2 className="text-sm uppercase tracking-[0.2em] text-white/80 md:text-base">Sections</h2>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {page.sections.map((sectionTitle) => (
+                <div
+                  key={sectionTitle}
+                  className="rounded-2xl border border-white/30 bg-black/25 px-5 py-4 text-sm uppercase tracking-[0.12em] text-white md:text-base"
+                >
+                  {sectionTitle}
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : null}
+
+        {page.mediaSections ? (
+          <div className="reveal mt-10 translate-y-8 opacity-0" style={{ transitionDelay: "0.18s" }}>
+            <h2 className="text-sm uppercase tracking-[0.2em] text-white/80 md:text-base">Document Sections</h2>
+            <div className="mt-4 grid gap-6 lg:grid-cols-2 lg:grid-rows-2">
+              {page.mediaSections.map((section) => (
+                <article
+                  key={section.title}
+                  className={`w-full overflow-hidden rounded-2xl border border-white/30 bg-black/25 ${
+                    section.title === "CWA Service Crew" ? "lg:col-start-2 lg:row-span-2 lg:row-start-1" : ""
+                  }`}
+                >
+                  <h3 className="border-b border-white/20 px-5 py-3 text-sm uppercase tracking-[0.12em] text-white md:text-base">
+                    {section.title}
+                  </h3>
+                  {section.image ? (
+                    <img src={section.image} alt={section.alt || `${section.title} preview`} className="h-auto w-full object-contain" />
+                  ) : (
+                    <div className="flex h-56 items-center justify-center bg-black/20 px-5 text-center text-sm uppercase tracking-[0.1em] text-white/60">
+                      Blank Document
+                    </div>
+                  )}
+                  {section.description ? (
+                    <p className="border-t border-white/20 px-5 py-4 text-sm leading-relaxed text-stone-100">{section.description}</p>
+                  ) : null}
+                </article>
+              ))}
+            </div>
+          </div>
+        ) : null}
 
         <a
           href="mailto:hello@maddiestanford.com"

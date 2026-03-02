@@ -16,12 +16,13 @@ export default function HeroSection() {
             className="reveal max-w-none translate-y-8 font-serif text-5xl leading-[1.1] text-stone-900 opacity-0 md:text-7xl lg:text-8xl"
             style={{ transitionDelay: "0.1s" }}
           >
-            Elevating spaces through <span className="italic text-pomegranate">botanical art</span> & curated design.
+            <span className="block">Designing & creating</span>
+            <span className="hero-bloom-phrase">experinces that bloom</span>
           </h1>
 
           <p className="mt-6 max-w-2xl text-[1.27rem] leading-relaxed text-stone-700 md:text-[1.45rem]">
-            I am Maddie Stanford. An event professional and floral artist dedicated to bringing exceptional corporate
-            visions, community gatherings, and unforgettable weddings to life.
+            Hi there! I'm Maddie, an event professional and floral artist. I am dedicated to bringing exceptional
+            corporate visions, community gatherings, and unforgettable experinces to life.
           </p>
 
           <div className="reveal mt-12 flex translate-y-8 flex-col gap-6 opacity-0 sm:flex-row" style={{ transitionDelay: "0.3s" }}>

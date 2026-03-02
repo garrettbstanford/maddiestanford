@@ -1,7 +1,6 @@
 import Navigation from "./components/Navigation";
 import IntroHeroSection from "./components/IntroHeroSection";
 import HeroSection from "./components/HeroSection";
-import WorkSection from "./components/WorkSection";
 import AboutSection from "./components/AboutSection";
 import PortfolioPageSection from "./components/PortfolioPageSection";
 import SiteFooter from "./components/SiteFooter";
@@ -13,7 +12,6 @@ function HomePage() {
     <>
       <IntroHeroSection />
       <HeroSection />
-      <WorkSection />
       <AboutSection />
     </>
   );

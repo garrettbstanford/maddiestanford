@@ -5,7 +5,7 @@ export default function SiteFooter() {
     <footer className="border-t border-stone-200 bg-stone-50 py-12">
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 px-6 md:flex-row">
         <div className="text-sm font-medium uppercase tracking-widest text-stone-900">
-          Maddie Stanford <span className="mx-2 text-pomegranate">|</span> Studio
+          Maddie Stanford
         </div>
 
         <div className="flex space-x-6 text-stone-500">
