@@ -1,0 +1,172 @@
+import { useEffect, useState } from "react";
+import { Menu, X } from "lucide-react";
+
+export default function Navigation({ navLinks }) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => {
+      setIsScrolled(window.scrollY > 80);
+    };
+
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const navShellClass = isScrolled
+    ? "border-b border-stone-200/60 bg-stone-50/85 backdrop-blur-md shadow-sm"
+    : "border-b border-transparent bg-transparent";
+
+  const brandClass = isScrolled
+    ? "text-stone-900 hover:text-pomegranate"
+    : "text-white hover:text-white/80 drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)]";
+
+  const desktopLinkClass = isScrolled
+    ? "text-stone-900 hover:text-pomegranate"
+    : "text-white hover:text-white/80 drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)]";
+
+  const underlineClass = isScrolled ? "bg-pomegranate" : "bg-white";
+
+  const dropdownPanelClass = isScrolled
+    ? "border-stone-200 bg-white"
+    : "border-white/25 bg-black/65 backdrop-blur-md";
+
+  const dropdownTextClass = isScrolled ? "text-stone-700" : "text-white/90";
+
+  const dropdownItemClass = isScrolled
+    ? "hover:bg-stone-100 hover:text-pomegranate"
+    : "hover:bg-white/10 hover:text-white";
+
+  const contactClass = isScrolled
+    ? "text-pomegranate hover:opacity-70"
+    : "text-white hover:opacity-80 drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)]";
+
+  const mobileButtonClass = isScrolled ? "text-stone-900" : "text-white";
+
+  const mobilePanelClass = isScrolled
+    ? "border-stone-200 bg-white text-stone-900"
+    : "border-white/20 bg-black/90 text-white backdrop-blur-md";
+
+  const mobileChildClass = isScrolled
+    ? "text-stone-600 hover:text-pomegranate"
+    : "text-white/80 hover:text-white";
+
+  const mobileContactClass = isScrolled ? "text-pomegranate" : "text-white";
+
+  return (
+    <nav className={`fixed left-0 top-0 z-50 w-full transition-all duration-300 ${navShellClass}`}>
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+        <a href="#home" className={`brand-signature text-4xl leading-none transition-colors duration-300 ${brandClass}`}>
+          Maddie Stanford
+        </a>
+
+        <div className="hidden space-x-12 text-sm uppercase tracking-wide md:flex">
+          {navLinks.map((link) =>
+            link.children ? (
+              <div key={link.label} className="group relative">
+                <a href={link.href} className={`relative transition-colors duration-300 ${desktopLinkClass}`}>
+                  {link.label}
+                  <span
+                    className={`absolute -bottom-1 left-0 h-px w-0 transition-all duration-300 group-hover:w-full ${underlineClass}`}
+                  />
+                </a>
+
+                <div className="invisible pointer-events-none absolute left-1/2 top-full z-50 -translate-x-1/2 pt-3 opacity-0 transition-all duration-300 group-hover:visible group-hover:pointer-events-auto group-hover:opacity-100 group-focus-within:visible group-focus-within:pointer-events-auto group-focus-within:opacity-100">
+                  <div className={`w-56 rounded-sm border p-3 shadow-xl ${dropdownPanelClass}`}>
+                    <div className={`flex flex-col gap-1 normal-case text-xs tracking-widest ${dropdownTextClass}`}>
+                      {link.children.map((childLink) => (
+                        <a
+                          key={childLink.label}
+                          href={childLink.href}
+                          className={`rounded px-3 py-2 transition-colors duration-300 ${dropdownItemClass}`}
+                        >
+                          {childLink.label}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <a
+                key={link.label}
+                href={link.href}
+                className={`group relative transition-colors duration-300 ${desktopLinkClass}`}
+              >
+                {link.label}
+                <span
+                  className={`absolute -bottom-1 left-0 h-px w-0 transition-all duration-300 group-hover:w-full ${underlineClass}`}
+                />
+              </a>
+            )
+          )}
+        </div>
+
+        <a
+          href="#contact"
+          className={`hidden text-sm font-medium uppercase tracking-wider transition-opacity md:block ${contactClass}`}
+        >
+          Contact
+        </a>
+
+        <button
+          type="button"
+          className={`transition-colors duration-300 md:hidden ${mobileButtonClass}`}
+          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+          onClick={() => setIsMenuOpen((open) => !open)}
+        >
+          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+      </div>
+
+      {isMenuOpen && (
+        <div className={`absolute left-0 top-full flex w-full flex-col space-y-6 border-b px-6 py-8 shadow-xl md:hidden ${mobilePanelClass}`}>
+          {navLinks.map((link) =>
+            link.children ? (
+              <div key={link.label} className="space-y-3">
+                <a
+                  href={link.href}
+                  className="block text-lg uppercase tracking-widest"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {link.label}
+                </a>
+                <div className="ml-4 flex flex-col space-y-3 border-l border-current/25 pl-4 normal-case">
+                  {link.children.map((childLink) => (
+                    <a
+                      key={childLink.label}
+                      href={childLink.href}
+                      className={`text-sm tracking-wider transition-colors duration-300 ${mobileChildClass}`}
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      {childLink.label}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <a
+                key={link.label}
+                href={link.href}
+                className="text-lg uppercase tracking-widest"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {link.label}
+              </a>
+            )
+          )}
+          <a
+            href="#contact"
+            className={`text-lg uppercase tracking-widest ${mobileContactClass}`}
+            onClick={() => setIsMenuOpen(false)}
+          >
+            Contact
+          </a>
+        </div>
+      )}
+    </nav>
+  );
+}
