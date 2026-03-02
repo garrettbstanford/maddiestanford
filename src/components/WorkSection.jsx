@@ -1,21 +1,22 @@
-import { projects } from "../data/siteContent";
+import { portfolioProjects } from "../data/siteContent";
 
 export default function WorkSection() {
   return (
     <section id="work" className="bg-white py-32">
       <div className="mx-auto max-w-7xl px-6">
         <div className="reveal mb-20 translate-y-8 text-center opacity-0">
-          <h2 className="mb-6 font-serif text-4xl text-stone-900 md:text-6xl">Selected Works</h2>
+          <h2 className="mb-6 font-serif text-4xl text-stone-900 md:text-6xl">Portfolio</h2>
           <p className="mx-auto max-w-2xl font-light leading-relaxed text-stone-500">
-            A curated collection of recent celebrations and installations. Each project is uniquely tailored to reflect
-            the essence of the occasion.
+            Explore portfolio categories to view work across corporate experiences, community gatherings, weddings, and
+            floral business collaborations.
           </p>
         </div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-12 md:gap-10">
-          {projects.map((project) => (
-            <article
+          {portfolioProjects.map((project) => (
+            <a
               key={project.title}
+              href={project.href}
               className={`group reveal relative overflow-hidden translate-y-8 opacity-0 ${project.classes}`}
               style={{ transitionDelay: project.delay }}
             >
@@ -38,17 +39,17 @@ export default function WorkSection() {
                   <h3 className="font-serif text-2xl text-white md:text-3xl">{project.title}</h3>
                 </div>
               </div>
-            </article>
+            </a>
           ))}
         </div>
 
         <div className="reveal mt-20 translate-y-8 text-center opacity-0">
-          <button
-            type="button"
+          <a
+            href="/portfolio/corporate"
             className="border-b border-stone-900 pb-1 text-sm uppercase tracking-widest text-stone-900 transition-colors hover:border-pomegranate hover:text-pomegranate"
           >
-            View All Projects
-          </button>
+            Explore Corporate Work
+          </a>
         </div>
       </div>
     </section>

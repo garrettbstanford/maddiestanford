@@ -1,19 +1,39 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Menu, X } from "lucide-react";
 
 export default function Navigation({ navLinks }) {
+  const navRef = useRef(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
     const onScroll = () => {
-      setIsScrolled(window.scrollY > 80);
+      const hasHomeSection = Boolean(document.querySelector("#home"));
+      const nextSection = document.querySelector("#home + section");
+
+      if (!hasHomeSection) {
+        setIsScrolled(true);
+        return;
+      }
+
+      if (!nextSection) {
+        setIsScrolled(window.scrollY > 80);
+        return;
+      }
+
+      const navHeight = navRef.current?.offsetHeight ?? 0;
+      const nextSectionTop = nextSection.getBoundingClientRect().top + window.scrollY;
+      setIsScrolled(window.scrollY + navHeight >= nextSectionTop);
     };
 
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
 
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
   }, []);
 
   const navShellClass = isScrolled
@@ -30,15 +50,9 @@ export default function Navigation({ navLinks }) {
 
   const underlineClass = isScrolled ? "bg-pomegranate" : "bg-white";
 
-  const dropdownPanelClass = isScrolled
-    ? "border-stone-200 bg-white"
-    : "border-white/25 bg-black/65 backdrop-blur-md";
-
-  const dropdownTextClass = isScrolled ? "text-stone-700" : "text-white/90";
-
-  const dropdownItemClass = isScrolled
-    ? "hover:bg-stone-100 hover:text-pomegranate"
-    : "hover:bg-white/10 hover:text-white";
+  const dropdownPanelClass = "border-stone-200 bg-white";
+  const dropdownTextClass = "text-stone-700";
+  const dropdownItemClass = "hover:bg-stone-100 hover:text-pomegranate";
 
   const contactClass = isScrolled
     ? "text-pomegranate hover:opacity-70"
@@ -57,9 +71,9 @@ export default function Navigation({ navLinks }) {
   const mobileContactClass = isScrolled ? "text-pomegranate" : "text-white";
 
   return (
-    <nav className={`fixed left-0 top-0 z-50 w-full transition-all duration-300 ${navShellClass}`}>
+    <nav ref={navRef} className={`fixed left-0 top-0 z-50 w-full transition-all duration-300 ${navShellClass}`}>
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        <a href="#home" className={`brand-signature text-4xl leading-none transition-colors duration-300 ${brandClass}`}>
+        <a href="/" className={`brand-signature text-4xl leading-none transition-colors duration-300 ${brandClass}`}>
           Maddie Stanford
         </a>
 
@@ -106,7 +120,7 @@ export default function Navigation({ navLinks }) {
         </div>
 
         <a
-          href="#contact"
+          href="mailto:hello@maddiestanford.com"
           className={`hidden text-sm font-medium uppercase tracking-wider transition-opacity md:block ${contactClass}`}
         >
           Contact
@@ -159,7 +173,7 @@ export default function Navigation({ navLinks }) {
             )
           )}
           <a
-            href="#contact"
+            href="mailto:hello@maddiestanford.com"
             className={`text-lg uppercase tracking-widest ${mobileContactClass}`}
             onClick={() => setIsMenuOpen(false)}
           >

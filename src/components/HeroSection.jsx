@@ -26,7 +26,7 @@ export default function HeroSection() {
 
           <div className="reveal mt-12 flex translate-y-8 flex-col gap-6 opacity-0 sm:flex-row" style={{ transitionDelay: "0.3s" }}>
             <a
-              href="#work"
+              href="/#work"
               className="group flex items-center space-x-3 rounded-full bg-stone-900 px-8 py-4 text-white transition-colors duration-500 hover:bg-pomegranate"
             >
               <span className="text-sm uppercase tracking-widest">View Portfolio</span>
