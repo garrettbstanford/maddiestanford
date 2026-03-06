@@ -3,6 +3,8 @@ import IntroHeroSection from "./components/IntroHeroSection";
 import HeroSection from "./components/HeroSection";
 import AboutSection from "./components/AboutSection";
 import PortfolioPageSection from "./components/PortfolioPageSection";
+import PortfolioOverviewSection from "./components/PortfolioOverviewSection";
+import ResumeSection from "./components/ResumeSection";
 import SiteFooter from "./components/SiteFooter";
 import { navLinks, portfolioPages } from "./data/siteContent";
 import useScrollReveal from "./hooks/useScrollReveal";
@@ -10,8 +12,8 @@ import useScrollReveal from "./hooks/useScrollReveal";
 function HomePage() {
   return (
     <>
-      <IntroHeroSection />
       <HeroSection />
+      <IntroHeroSection />
       <AboutSection />
     </>
   );
@@ -25,9 +27,7 @@ export default function App() {
   return (
     <div className="min-h-screen overflow-x-hidden bg-stone-50 text-stone-900 selection:bg-pomegranate selection:text-white">
       <Navigation navLinks={navLinks} />
-      <main>
-        {portfolioPage ? <PortfolioPageSection page={portfolioPage} /> : <HomePage />}
-      </main>
+      <main>{pathname === "/portfolio" ? <PortfolioOverviewSection /> : pathname === "/resume" ? <ResumeSection /> : portfolioPage ? <PortfolioPageSection page={portfolioPage} /> : <HomePage />}</main>
       <SiteFooter />
     </div>
   );

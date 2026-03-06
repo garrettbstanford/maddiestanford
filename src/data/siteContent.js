@@ -6,7 +6,7 @@ export const navLinks = [
   { label: "Home", href: "/" },
   {
     label: "Portfolio",
-    href: "/#work",
+    href: "/portfolio",
     children: [
       { label: "Corporate", href: "/portfolio/corporate" },
       { label: "Community", href: "/portfolio/community" },
@@ -14,7 +14,7 @@ export const navLinks = [
       { label: "Floral Business", href: "/portfolio/floral-business" }
     ]
   },
-  { label: "Resume", href: "/#about" }
+  { label: "Resume", href: "/resume" }
 ];
 
 export const services = [
@@ -41,6 +41,8 @@ export const portfolioProjects = [
     image:
       "https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&q=80",
     alt: "Modern corporate gala with floral staging",
+    summary:
+      "Executive retreats, launch events, keynote experiences, and hospitality programs crafted for brand clarity and guest impact.",
     href: "/portfolio/corporate",
     classes: "md:col-span-8 aspect-[16/10]",
     delay: "0s",
@@ -52,6 +54,8 @@ export const portfolioProjects = [
     image:
       "https://images.unsplash.com/photo-1596436854581-22874136412f?auto=format&fit=crop&q=80",
     alt: "Community event floral bouquet",
+    summary:
+      "Neighborhood activations, nonprofit programs, and cultural events built around warmth, flow, and meaningful connection.",
     href: "/portfolio/community",
     classes: "md:col-span-4 aspect-[3/4]",
     delay: "0.1s",
@@ -63,6 +67,8 @@ export const portfolioProjects = [
     image:
       "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&q=80",
     alt: "Wedding dinner tablescape",
+    summary:
+      "Ceremony-to-reception storytelling with floral installs, table design, and seamless transitions throughout the day.",
     href: "/portfolio/weddings",
     classes: "md:col-span-5 aspect-[3/4] md:-mt-20",
     delay: "0s",
@@ -74,6 +80,8 @@ export const portfolioProjects = [
     image:
       "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&q=80",
     alt: "Floral business installation",
+    summary:
+      "Editorial shoots, retail partnerships, and long-term floral direction that helps businesses express a distinct point of view.",
     href: "/portfolio/floral-business",
     classes: "md:col-span-7 aspect-[16/10] md:mt-20",
     delay: "0.2s",
@@ -85,8 +93,19 @@ export const portfolioPages = {
   "/portfolio/corporate": {
     kicker: "Portfolio / Corporate",
     title: "Corporate",
-    description:
-      "Executive retreats, launch nights, keynote stages, and hospitality suites designed to feel elevated, intentional, and true to brand voice.",
+    skills: [
+      "Timeline Development",
+      "Vendor Coordination",
+      "Budget Management",
+      "Run of Show Planning",
+      "Client Communication",
+      "On-Site Execution",
+      "Stakeholder Alignment",
+      "Contract Negotiation",
+      "Venue Logistics",
+      "Team Training",
+      "Risk & Contingency Planning"
+    ],
     image:
       "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&q=80",
     highlights: ["Executive Retreats", "Brand Activations", "Conference Styling"],
@@ -124,7 +143,7 @@ export const portfolioPages = {
     kicker: "Portfolio / Community",
     title: "Community",
     description:
-      "Seasonal markets, nonprofit galas, and civic gatherings built around warmth, flow, and floral moments that invite people to linger and connect.",
+      "Corporate event planning with clear timelines, vendor coordination, budget discipline, and polished guest experiences from kickoff through final execution.",
     image:
       "https://images.unsplash.com/photo-1472653431158-6364773b2a56?auto=format&fit=crop&q=80",
     highlights: ["Fundraisers", "Cultural Events", "Neighborhood Celebrations"]

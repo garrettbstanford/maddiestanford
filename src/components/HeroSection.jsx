@@ -3,7 +3,7 @@ import mainHeroPhoto from "../assets/main-hero.jpg";
 
 export default function HeroSection() {
   return (
-    <section className="relative min-h-screen overflow-hidden pt-20">
+    <section id="home" className="relative min-h-screen overflow-hidden pt-20">
       <div className="absolute -left-40 top-24 h-80 w-80 rounded-full bg-pomegranate/10 blur-3xl" />
 
       <div className="mx-auto grid min-h-[calc(100vh-5rem)] max-w-7xl items-center gap-12 px-6 py-12 md:grid-cols-12 md:gap-16">
@@ -27,7 +27,7 @@ export default function HeroSection() {
 
           <div className="reveal mt-12 flex translate-y-8 flex-col gap-6 opacity-0 sm:flex-row" style={{ transitionDelay: "0.3s" }}>
             <a
-              href="/#work"
+              href="/portfolio"
               className="group flex items-center space-x-3 rounded-full bg-stone-900 px-8 py-4 text-white transition-colors duration-500 hover:bg-pomegranate"
             >
               <span className="text-sm uppercase tracking-widest">View Portfolio</span>

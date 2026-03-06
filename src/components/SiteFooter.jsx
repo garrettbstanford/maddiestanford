@@ -9,10 +9,16 @@ export default function SiteFooter() {
         </div>
 
         <div className="flex space-x-6 text-stone-500">
-          <a href="#" aria-label="Instagram" className="transition-colors hover:text-pomegranate">
+          <a
+            href="https://www.instagram.com/pomegranatepom.florals/?hl=en"
+            target="_blank"
+            rel="noreferrer noopener"
+            aria-label="Instagram"
+            className="transition-colors hover:text-pomegranate"
+          >
             <Instagram size={20} />
           </a>
-          <a href="mailto:hello@maddiestanford.com" aria-label="Email" className="transition-colors hover:text-pomegranate">
+          <a href="mailto:madleestan@gmail.com" aria-label="Email" className="transition-colors hover:text-pomegranate">
             <Mail size={20} />
           </a>
         </div>
