@@ -1,5 +1,5 @@
 import Navigation from "./components/Navigation";
-import IntroHeroSection from "./components/IntroHeroSection";
+import ScrollVideoSection from "./components/ScrollVideoSection";
 import HeroSection from "./components/HeroSection";
 import AboutSection from "./components/AboutSection";
 import PortfolioPageSection from "./components/PortfolioPageSection";
@@ -13,7 +13,7 @@ function HomePage() {
   return (
     <>
       <HeroSection />
-      <IntroHeroSection />
+      <ScrollVideoSection />
       <AboutSection />
     </>
   );

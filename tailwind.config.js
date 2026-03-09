@@ -7,9 +7,9 @@ export default {
         pomegranate: "#8A2226"
       },
       fontFamily: {
-        sans: ["Manrope", "sans-serif"],
-        serif: ["Cormorant Garamond", "serif"],
-        script: ["Runethia", "cursive"]
+        sans: ["Cal Sans", "sans-serif"],
+        serif: ["Cal Sans", "sans-serif"],
+        script: ["Cal Sans", "sans-serif"]
       }
     }
   },

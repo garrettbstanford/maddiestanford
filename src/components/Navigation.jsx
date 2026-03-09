@@ -1,10 +1,27 @@
 import { useEffect, useRef, useState } from "react";
 import { Menu, X } from "lucide-react";
 
+const THEME_COLOR = "#8a2226";
+
+function setThemeColor(color) {
+  let themeColorMeta = document.querySelector('meta[name="theme-color"]');
+
+  if (!themeColorMeta) {
+    themeColorMeta = document.createElement("meta");
+    themeColorMeta.setAttribute("name", "theme-color");
+    document.head.appendChild(themeColorMeta);
+  }
+
+  themeColorMeta.setAttribute("content", color);
+}
+
 export default function Navigation({ navLinks }) {
   const navRef = useRef(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(() => {
+    const pathname = window.location.pathname.replace(/\/+$/, "") || "/";
+    return pathname !== "/";
+  });
 
   useEffect(() => {
     const onScroll = () => {
@@ -36,17 +53,21 @@ export default function Navigation({ navLinks }) {
     };
   }, []);
 
+  useEffect(() => {
+    setThemeColor(THEME_COLOR);
+  }, []);
+
   const navShellClass = isScrolled
     ? "border-b border-stone-200/60 bg-stone-50/85 backdrop-blur-md shadow-sm"
-    : "border-b border-transparent bg-transparent";
+    : "border-b border-pomegranate/80 bg-pomegranate shadow-[0_10px_30px_rgba(138,34,38,0.22)]";
 
   const brandClass = isScrolled
     ? "text-stone-900 hover:text-pomegranate"
-    : "text-white hover:text-white/80 drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)]";
+    : "text-stone-50 hover:text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)]";
 
   const desktopLinkClass = isScrolled
     ? "text-stone-900 hover:text-pomegranate"
-    : "text-white hover:text-white/80 drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)]";
+    : "text-stone-50 hover:text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)]";
 
   const underlineClass = isScrolled ? "bg-pomegranate" : "bg-white";
 
@@ -56,7 +77,7 @@ export default function Navigation({ navLinks }) {
 
   const contactClass = isScrolled
     ? "text-pomegranate hover:opacity-70"
-    : "text-white hover:opacity-80 drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)]";
+    : "text-stone-50 hover:opacity-80 drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)]";
 
   const mobileButtonClass = isScrolled ? "text-stone-900" : "text-white";
 

@@ -7,7 +7,15 @@
       name="description"
       content="Maddie Stanford is an event professional and florist creating elevated, botanical-forward experiences."
     />
-    <title>Maddie Stanford Studio</title>
+    <meta name="theme-color" content="#8a2226" />
+    <script>
+      const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+
+      if (themeColorMeta) {
+        themeColorMeta.setAttribute("content", "#8a2226");
+      }
+    </script>
+    <title>Maddie Stanford</title>
   </head>
   <body>
     <div id="root"></div>
