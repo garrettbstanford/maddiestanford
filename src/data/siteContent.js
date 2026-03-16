@@ -1,6 +1,10 @@
 import busQuoteList from "../assets/bus-quote-list.png";
 import mondayCom from "../assets/monday-com.png";
 import cwaServiceCrew from "../assets/cwa-service-crew.jpg";
+import weddingMoodboardJpg from "../assets/wedding-moodboard.jpg";
+import timeline1 from "../assets/timeline1.png";
+import timeline2 from "../assets/timeline2.png";
+import timeline3 from "../assets/timeline3.png";
 
 export const navLinks = [
   { label: "Home", href: "/" },
@@ -155,7 +159,37 @@ export const portfolioPages = {
       "Ceremony-to-reception environments with sculptural florals, layered tablescapes, and considered transitions that keep each chapter of the day cohesive.",
     image:
       "https://images.unsplash.com/photo-1469371670807-013ccf25f16a?auto=format&fit=crop&q=80",
-    highlights: ["Ceremony Design", "Reception Styling", "Floral Installations"]
+    highlights: ["Ceremony Design", "Reception Styling", "Floral Installations"],
+    mediaSections: [
+      {
+        title: "Timeline - Annie & Jack",
+        image: timeline1,
+        alt: "Timeline 1",
+        description: "This is a small snapshot of a wedding timeline I helped carry out, I had no part in creating this timeline only the execusion. This section outlines the first phase of set up our team carried out."
+      },
+      {
+        image: timeline2,
+        alt: "Timeline 2",
+        description: "This was phase two of our setup. Being detail orriented is one of my favorite parts about event planning."
+      },
+      {
+        image: timeline3,
+        alt: "Timeline 3",
+        description: "For this event there were over 180 guests, 30+ linens, and endless memories made."
+      },
+      {
+        title: "Wedding Moodboard",
+        image: weddingMoodboardJpg,
+        alt: "Wedding Moodboard",
+        description: "I built this wedding moodboard given the prompt, \"The sky is the limit!\". This is what I dreamt up, a mix of modern luxury and extravagence."
+      },
+      {
+        title: "Luxury Wedding Video",
+        linkUrl: "https://www.instagram.com/reel/DVgeeV7Edjw/?utm_source=ig_web_copy_link&igsh=NTc4MTIwNjQ2YQ==",
+        linkLabel: "Watch Luxury Wedding Video",
+        description: "Working as a wedding coordinator assistant for Michelle Leo Events"
+      }
+    ]
   },
   "/portfolio/floral-business": {
     kicker: "Portfolio / Floral Business",
