@@ -1,6 +1,8 @@
 import { ArrowUpRight } from "lucide-react";
 
 export default function PortfolioPageSection({ page }) {
+  const isWeddingPage = page?.title === "Weddings";
+
   return (
     <section className="relative min-h-screen overflow-hidden bg-white">
       <div className="relative z-10 mx-auto w-full max-w-7xl px-6 pb-24 pt-40 md:pb-28">
@@ -37,12 +39,12 @@ export default function PortfolioPageSection({ page }) {
         {page.mediaSections ? (
           <div className="reveal mt-10 translate-y-8 opacity-0" style={{ transitionDelay: "0.18s" }}>
             <h2 className="text-sm uppercase tracking-[0.2em] text-stone-700 md:text-base">Document Sections</h2>
-            <div className="mt-4 grid gap-6 lg:grid-cols-2 lg:grid-rows-2">
+            <div className={`mt-4 grid gap-6 ${isWeddingPage ? "mx-auto max-w-3xl grid-cols-1" : "lg:grid-cols-2 lg:grid-rows-2"}`}>
               {page.mediaSections.map((section, index) => (
                 <article
                   key={`${section.title || "section"}-${index}`}
-                  className={`w-full overflow-hidden rounded-2xl border border-stone-200 bg-white ${
-                    section.title === "CWA Service Crew" ? "lg:col-start-2 lg:row-span-2 lg:row-start-1" : ""
+                  className={`self-start w-full overflow-hidden rounded-2xl border border-stone-200 bg-white ${
+                    !isWeddingPage && section.title === "CWA Service Crew" ? "lg:col-start-2 lg:row-span-2 lg:row-start-1" : ""
                   }`}
                 >
                   {section.title ? (
