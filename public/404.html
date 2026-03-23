@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Maddie Stanford</title>
+    <script>
+      (() => {
+        const { hostname, pathname, search, hash } = window.location;
+        const pathSegments = pathname.split("/").filter(Boolean);
+        const repoSegmentCount = hostname.endsWith(".github.io") ? 1 : 0;
+        const basePath =
+          repoSegmentCount > 0 ? `/${pathSegments.slice(0, repoSegmentCount).join("/")}` : "";
+        const routePath = `/${pathSegments.slice(repoSegmentCount).join("/")}` || "/";
+        const params = new URLSearchParams();
+
+        params.set("route", routePath === "//" ? "/" : routePath);
+
+        if (search) {
+          params.set("search", search.slice(1));
+        }
+
+        if (hash) {
+          params.set("hash", hash.slice(1));
+        }
+
+        window.location.replace(`${basePath || ""}/?${params.toString()}`);
+      })();
+    </script>
+  </head>
+  <body></body>
+</html>

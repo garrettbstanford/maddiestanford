@@ -1,5 +1,6 @@
 import { ArrowRight } from "lucide-react";
 import { portfolioProjects } from "../data/siteContent";
+import { withBasePath } from "../utils/routing";
 
 export default function PortfolioOverviewSection() {
   return (
@@ -29,7 +30,7 @@ export default function PortfolioOverviewSection() {
                 <p className="mt-4 leading-relaxed text-stone-600">{project.summary}</p>
 
                 <a
-                  href={project.href}
+                  href={withBasePath(project.href)}
                   className="mt-7 inline-flex items-center gap-2 rounded-full border border-stone-900 px-5 py-2 text-xs uppercase tracking-[0.2em] text-stone-900 transition-colors duration-300 hover:border-pomegranate hover:bg-pomegranate hover:text-white"
                 >
                   View {project.title}

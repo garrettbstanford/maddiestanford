@@ -8,6 +8,7 @@ import ResumeSection from "./components/ResumeSection";
 import SiteFooter from "./components/SiteFooter";
 import { navLinks, portfolioPages } from "./data/siteContent";
 import useScrollReveal from "./hooks/useScrollReveal";
+import { getCurrentRoutePath } from "./utils/routing";
 
 function HomePage() {
   return (
@@ -21,7 +22,7 @@ function HomePage() {
 
 export default function App() {
   useScrollReveal();
-  const pathname = window.location.pathname.replace(/\/+$/, "") || "/";
+  const pathname = getCurrentRoutePath();
   const portfolioPage = portfolioPages[pathname];
 
   return (

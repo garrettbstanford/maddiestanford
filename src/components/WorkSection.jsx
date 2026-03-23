@@ -1,4 +1,5 @@
 import { portfolioProjects } from "../data/siteContent";
+import { withBasePath } from "../utils/routing";
 
 export default function WorkSection() {
   return (
@@ -16,7 +17,7 @@ export default function WorkSection() {
           {portfolioProjects.map((project) => (
             <a
               key={project.title}
-              href={project.href}
+              href={withBasePath(project.href)}
               className={`group reveal relative overflow-hidden translate-y-8 opacity-0 ${project.classes}`}
               style={{ transitionDelay: project.delay }}
             >
@@ -45,7 +46,7 @@ export default function WorkSection() {
 
         <div className="reveal mt-20 translate-y-8 text-center opacity-0">
           <a
-            href="/portfolio/corporate"
+            href={withBasePath("/portfolio/corporate")}
             className="border-b border-stone-900 pb-1 text-sm uppercase tracking-widest text-stone-900 transition-colors hover:border-pomegranate hover:text-pomegranate"
           >
             Explore Corporate Work

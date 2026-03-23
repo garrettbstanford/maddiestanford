@@ -1,4 +1,268 @@
-import { ArrowUpRight } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { ArrowUpRight, Instagram } from "lucide-react";
+import ClientReviewsSection from "./ClientReviewsSection";
+import volunteer3Jpeg from "../../Volunteer 3.jpeg";
+
+const mediaSort = new Intl.Collator(undefined, {
+  numeric: true,
+  sensitivity: "base"
+});
+
+const bridalBouquetMediaModules = import.meta.glob(
+  [
+    "/Bridal Bouquet *.{avif,gif,heic,jpeg,jpg,m4v,mp4,mov,png,webm,webp,AVIF,GIF,HEIC,JPEG,JPG,M4V,MP4,MOV,PNG,WEBM,WEBP}",
+    "/Bridal Bouquet Pics/*.{avif,gif,heic,jpeg,jpg,m4v,mp4,mov,png,webm,webp,AVIF,GIF,HEIC,JPEG,JPG,M4V,MP4,MOV,PNG,WEBM,WEBP}",
+    "/src/assets/Bridal Bouquet Pics/*.{avif,gif,heic,jpeg,jpg,m4v,mp4,mov,png,webm,webp,AVIF,GIF,HEIC,JPEG,JPG,M4V,MP4,MOV,PNG,WEBM,WEBP}"
+  ],
+  { eager: true, import: "default" }
+);
+
+const floralInstallMediaModules = import.meta.glob(
+  [
+    "/Instal *.{avif,gif,heic,jpeg,jpg,m4v,mp4,mov,png,webm,webp,AVIF,GIF,HEIC,JPEG,JPG,M4V,MP4,MOV,PNG,WEBM,WEBP}",
+    "/Install *.{avif,gif,heic,jpeg,jpg,m4v,mp4,mov,png,webm,webp,AVIF,GIF,HEIC,JPEG,JPG,M4V,MP4,MOV,PNG,WEBM,WEBP}",
+    "/Floral Install *.{avif,gif,heic,jpeg,jpg,m4v,mp4,mov,png,webm,webp,AVIF,GIF,HEIC,JPEG,JPG,M4V,MP4,MOV,PNG,WEBM,WEBP}",
+    "/src/assets/Instal *.{avif,gif,heic,jpeg,jpg,m4v,mp4,mov,png,webm,webp,AVIF,GIF,HEIC,JPEG,JPG,M4V,MP4,MOV,PNG,WEBM,WEBP}"
+  ],
+  { eager: true, import: "default" }
+);
+
+const freelancingMediaModules = import.meta.glob(
+  [
+    "/Freelancing *.{avif,gif,heic,jpeg,jpg,m4v,mp4,mov,png,webm,webp,AVIF,GIF,HEIC,JPEG,JPG,M4V,MP4,MOV,PNG,WEBM,WEBP}",
+    "/Freelance *.{avif,gif,heic,jpeg,jpg,m4v,mp4,mov,png,webm,webp,AVIF,GIF,HEIC,JPEG,JPG,M4V,MP4,MOV,PNG,WEBM,WEBP}",
+    "/src/assets/Freelancing *.{avif,gif,heic,jpeg,jpg,m4v,mp4,mov,png,webm,webp,AVIF,GIF,HEIC,JPEG,JPG,M4V,MP4,MOV,PNG,WEBM,WEBP}"
+  ],
+  { eager: true, import: "default" }
+);
+
+const wreathMediaModules = import.meta.glob(
+  [
+    "/Wreath *.{avif,gif,heic,jpeg,jpg,m4v,mp4,mov,png,webm,webp,AVIF,GIF,HEIC,JPEG,JPG,M4V,MP4,MOV,PNG,WEBM,WEBP}",
+    "/src/assets/Wreath *.{avif,gif,heic,jpeg,jpg,m4v,mp4,mov,png,webm,webp,AVIF,GIF,HEIC,JPEG,JPG,M4V,MP4,MOV,PNG,WEBM,WEBP}"
+  ],
+  { eager: true, import: "default" }
+);
+
+const volunteerMediaModules = import.meta.glob(
+  [
+    "/Volunteer *.*",
+    "/src/assets/Volunteer *.*"
+  ],
+  { eager: true, import: "default" }
+);
+
+const isSupportedMediaFile = (path) => /\.(avif|gif|heic|jpeg|jpg|m4v|mp4|mov|png|webm|webp)$/i.test(path);
+const isVideoFile = (path) => /\.(mp4|mov|m4v|webm)$/i.test(path);
+const getFileExtension = (path) => path.split(".").pop()?.toLowerCase() || "";
+
+const formatMediaLabel = (path) =>
+  path
+    .split("/")
+    .pop()
+    ?.replace(/\.[^.]+$/, "")
+    .replace(/[-_]+/g, " ")
+    .trim();
+
+const freelancingCaptions = {
+  "Freelancing 1": "Lily & Iris",
+  "Freelancing 2": "Rose + Thyme Floral",
+  "Freelancing 3": "Collective Floral",
+  "Freelancing 4": "De La Flor",
+  "Freelancing 5": "Lily & Iris",
+  "Freelancing 6": "Lily & Iris",
+  "Freelancing 7": "De La Flor",
+  "Freelancing 8": "Lily & Iris",
+  "Freelancing 9": "Lily & Iris",
+  "Freelancing 10": "Colective Floral",
+  "Freelancing 11": "De La Flor",
+  "Freelancing 12": "Fly High Flora"
+};
+
+const volunteerMediaSourceOverrides = {
+  "Volunteer 3": volunteer3Jpeg
+};
+
+const buildMediaCollection = (mediaModules, captionMap = {}) =>
+  Array.from(
+    Object.entries(mediaModules)
+      .filter(([path]) => isSupportedMediaFile(path))
+      .sort(([leftPath], [rightPath]) => mediaSort.compare(leftPath, rightPath))
+      .reduce((collection, [path, src]) => {
+        const alt = formatMediaLabel(path);
+        const existingItem = collection.get(alt);
+        const nextItem = {
+          src,
+          type: isVideoFile(path) ? "video" : "image",
+          alt,
+          caption: captionMap[alt],
+          extension: getFileExtension(path)
+        };
+
+        if (!existingItem) {
+          collection.set(alt, nextItem);
+          return collection;
+        }
+
+        // Prefer non-HEIC media when duplicate filenames exist in multiple formats.
+        if (existingItem.extension === "heic" && nextItem.extension !== "heic") {
+          collection.set(alt, nextItem);
+        }
+
+        return collection;
+      }, new Map()).values()
+  ).map(({ extension, ...item }) => item);
+
+const mediaCollections = {
+  bridalBouquet: buildMediaCollection(bridalBouquetMediaModules),
+  floralInstall: buildMediaCollection(floralInstallMediaModules),
+  freelancing: buildMediaCollection(freelancingMediaModules, freelancingCaptions),
+  wreath: buildMediaCollection(wreathMediaModules),
+  volunteer: buildMediaCollection(volunteerMediaModules).map((item) =>
+    volunteerMediaSourceOverrides[item.alt] ? { ...item, src: volunteerMediaSourceOverrides[item.alt] } : item
+  )
+};
+
+function PortfolioMediaCarousel({ items, title, advanceVideosOnEnd = false }) {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const videoRefs = useRef([]);
+  const activeItem = items?.[activeIndex] || items?.[0];
+
+  useEffect(() => {
+    setActiveIndex(0);
+  }, [items]);
+
+  useEffect(() => {
+    if (!items?.length || items.length === 1) {
+      return undefined;
+    }
+
+    if (advanceVideosOnEnd && activeItem?.type === "video") {
+      return undefined;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setActiveIndex((currentIndex) => (currentIndex + 1) % items.length);
+    }, 5200);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [activeItem?.type, activeIndex, advanceVideosOnEnd, items]);
+
+  useEffect(() => {
+    videoRefs.current.forEach((video, index) => {
+      if (!video) {
+        return;
+      }
+
+      if (index === activeIndex) {
+        video.play().catch(() => {});
+        return;
+      }
+
+      video.pause();
+      video.currentTime = 0;
+    });
+  }, [activeIndex, items]);
+
+  if (!items?.length) {
+    return null;
+  }
+
+  return (
+    <div className="bg-stone-100 p-4">
+      <div className="overflow-hidden rounded-xl border border-stone-200 bg-white shadow-sm">
+        <div className="overflow-hidden bg-stone-50">
+          <div
+            className="flex min-h-[22rem] transition-transform duration-700 will-change-transform"
+            style={{
+              transform: `translateX(-${activeIndex * 100}%)`,
+              transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)"
+            }}
+          >
+            {items.map((item, index) => (
+              <div key={item.src} className="flex w-full shrink-0 flex-col items-center justify-center gap-3 px-3 py-4">
+                {item.type === "video" ? (
+                  <video
+                    ref={(node) => {
+                      videoRefs.current[index] = node;
+                    }}
+                    src={item.src}
+                    title={`${title} ${item.alt || "video"}`}
+                    className="max-h-[34rem] w-full object-contain"
+                    muted
+                    loop={!advanceVideosOnEnd}
+                    playsInline
+                    preload="metadata"
+                    onEnded={() => {
+                      if (!advanceVideosOnEnd || items.length <= 1 || index !== activeIndex) {
+                        return;
+                      }
+
+                      setActiveIndex((currentIndex) => (currentIndex + 1) % items.length);
+                    }}
+                  />
+                ) : (
+                  <img src={item.src} alt={`${title} ${item.alt || "photo"}`} className="max-h-[34rem] w-full object-contain" />
+                )}
+                {item.caption ? <p className="text-sm uppercase tracking-[0.14em] text-stone-600">{item.caption}</p> : null}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {items.length > 1 ? (
+          <div className="flex items-center justify-between gap-4 border-t border-stone-200 px-4 py-3">
+            <p className="text-[11px] uppercase tracking-[0.18em] text-stone-500">
+              {activeIndex + 1} / {items.length}
+            </p>
+
+            <div className="flex flex-wrap justify-end gap-2">
+              {items.map((item, index) => (
+                <button
+                  key={item.src}
+                  type="button"
+                  onClick={() => setActiveIndex(index)}
+                  className={`h-2.5 w-2.5 rounded-full transition-colors duration-300 ${
+                    index === activeIndex ? "bg-pomegranate" : "bg-stone-300 hover:bg-stone-400"
+                  }`}
+                  aria-label={`Show ${title} item ${index + 1}`}
+                />
+              ))}
+            </div>
+          </div>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
+function SectionDescription({ paragraphs, className, logo, logoAlt, logos = [] }) {
+  const logoItems = logos.length ? logos : logo ? [{ src: logo, alt: logoAlt || "Section logo" }] : [];
+
+  return (
+    <div className={className}>
+      <div className="space-y-5">
+        {logoItems.length ? (
+          <div className="flex flex-wrap items-center gap-4">
+            {logoItems.map((logoItem, index) => (
+              <img
+                key={`${logoItem.alt || "logo"}-${index}`}
+                src={logoItem.src}
+                alt={logoItem.alt || "Section logo"}
+                className="h-10 w-auto object-contain md:h-12"
+              />
+            ))}
+          </div>
+        ) : null}
+        {paragraphs.map((paragraph, index) => (
+          <p key={`${paragraph.slice(0, 24)}-${index}`} className="whitespace-pre-line text-base leading-relaxed text-stone-600">
+            {paragraph}
+          </p>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function PortfolioPageSection({ page }) {
   const isWeddingPage = page?.title === "Weddings";
@@ -36,74 +300,6 @@ export default function PortfolioPageSection({ page }) {
           </p>
         ) : null}
 
-        {page.mediaSections ? (
-          <div className="reveal mt-10 translate-y-8 opacity-0" style={{ transitionDelay: "0.18s" }}>
-            <h2 className="text-sm uppercase tracking-[0.2em] text-stone-700 md:text-base">Document Sections</h2>
-            <div className={`mt-4 grid gap-6 ${isWeddingPage ? "mx-auto max-w-3xl grid-cols-1" : "lg:grid-cols-2 lg:grid-rows-2"}`}>
-              {page.mediaSections.map((section, index) => (
-                <article
-                  key={`${section.title || "section"}-${index}`}
-                  className={`self-start w-full overflow-hidden rounded-2xl border border-stone-200 bg-white ${
-                    !isWeddingPage && section.title === "CWA Service Crew" ? "lg:col-start-2 lg:row-span-2 lg:row-start-1" : ""
-                  }`}
-                >
-                  {section.title ? (
-                    <h3 className="border-b border-stone-200 px-5 py-3 text-sm uppercase tracking-[0.12em] text-stone-700 md:text-base">
-                      {section.title}
-                    </h3>
-                  ) : null}
-                  {section.image ? (
-                    <img src={section.image} alt={section.alt || `${section.title} preview`} className="h-auto w-full object-contain" />
-                  ) : section.linkUrl ? (
-                    <div className="flex h-56 items-center justify-center bg-stone-100 px-5 text-center">
-                      <a
-                        href={section.linkUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-flex items-center gap-2 rounded-full border border-stone-700 px-5 py-2 text-xs uppercase tracking-[0.14em] text-stone-700 transition-colors duration-300 hover:border-pomegranate hover:bg-pomegranate hover:text-white"
-                      >
-                        {section.linkLabel || "View Link"}
-                        <ArrowUpRight size={14} />
-                      </a>
-                    </div>
-                  ) : section.embedUrl ? (
-                    <div className="bg-stone-100 p-4">
-                      <div className="relative mx-auto w-full max-w-sm overflow-hidden rounded-xl" style={{ aspectRatio: "9 / 16" }}>
-                        <iframe
-                          src={section.embedUrl}
-                          title={section.title}
-                          className="absolute inset-0 h-full w-full border-0"
-                          allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-                          allowFullScreen
-                        />
-                      </div>
-                    </div>
-                  ) : section.file ? (
-                    <div className="flex h-56 items-center justify-center bg-stone-100 px-5 text-center">
-                      <a
-                        href={section.file}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-flex items-center gap-2 rounded-full border border-stone-700 px-5 py-2 text-xs uppercase tracking-[0.14em] text-stone-700 transition-colors duration-300 hover:border-pomegranate hover:bg-pomegranate hover:text-white"
-                      >
-                        Open PDF
-                        <ArrowUpRight size={14} />
-                      </a>
-                    </div>
-                  ) : (
-                    <div className="flex h-56 items-center justify-center bg-stone-100 px-5 text-center text-sm uppercase tracking-[0.1em] text-stone-500">
-                      Blank Document
-                    </div>
-                  )}
-                  {section.description ? (
-                    <p className="border-t border-stone-200 px-5 py-4 text-sm leading-relaxed text-stone-600">{section.description}</p>
-                  ) : null}
-                </article>
-              ))}
-            </div>
-          </div>
-        ) : null}
-
         <a
           href="mailto:hello@maddiestanford.com"
           className="reveal mt-10 inline-flex translate-y-8 items-center gap-3 rounded-full border border-stone-900 px-7 py-3 text-xs uppercase tracking-[0.2em] text-stone-900 opacity-0 transition-colors duration-300 hover:border-pomegranate hover:bg-pomegranate hover:text-white"
@@ -112,6 +308,166 @@ export default function PortfolioPageSection({ page }) {
           Inquire About This Work
           <ArrowUpRight size={16} />
         </a>
+
+        {page.mediaSections ? (
+          <div className="reveal mt-10 translate-y-8 opacity-0" style={{ transitionDelay: "0.18s" }}>
+            <h2 className="text-sm uppercase tracking-[0.2em] text-stone-700 md:text-base">{page.mediaHeading || "Document Sections"}</h2>
+            <div className={`mt-4 grid gap-6 ${isWeddingPage ? "mx-auto max-w-3xl grid-cols-1" : "lg:grid-cols-2 lg:grid-rows-2"}`}>
+              {page.mediaSections.map((section, index) => {
+                const sectionMediaItems = section.mediaCollection ? mediaCollections[section.mediaCollection] || [] : [];
+                const sectionBottomMediaItems = section.bottomMediaCollection ? mediaCollections[section.bottomMediaCollection] || [] : [];
+                const sectionDescriptionParagraphs = section.descriptionParagraphs?.length
+                  ? section.descriptionParagraphs
+                  : section.description
+                    ? [section.description]
+                    : [];
+                const hasDescription = sectionDescriptionParagraphs.length > 0;
+                const hasPrimaryDisplayMedia =
+                  sectionMediaItems.length > 0 || section.image || section.video || section.linkUrl || section.embedUrl || section.file;
+                const hasBottomMedia = sectionBottomMediaItems.length > 0;
+                const hasAnyDisplayMedia = hasPrimaryDisplayMedia || hasBottomMedia;
+
+                return (
+                  <article
+                    key={`${section.title || "section"}-${index}`}
+                    className={`self-start w-full overflow-hidden rounded-2xl border border-stone-200 bg-white ${
+                      !isWeddingPage && section.title === "CWA Service Crew" ? "lg:col-start-2 lg:row-span-2 lg:row-start-1" : ""
+                    }`}
+                  >
+                    {section.title ? (
+                      <h3 className="border-b border-stone-200 px-5 py-3 text-sm uppercase tracking-[0.12em] text-stone-700 md:text-base">
+                        {section.title}
+                      </h3>
+                    ) : null}
+                    {sectionMediaItems.length > 0 ? (
+                      <PortfolioMediaCarousel
+                        items={sectionMediaItems}
+                        title={section.title || "Portfolio media"}
+                        advanceVideosOnEnd={section.advanceVideosOnEnd}
+                      />
+                    ) : section.image ? (
+                      <div className="bg-stone-50">
+                        <img src={section.image} alt={section.alt || `${section.title} preview`} className="h-auto w-full object-contain" />
+                      </div>
+                    ) : section.video ? (
+                      <div className="bg-stone-100 p-4">
+                        <div className="relative mx-auto w-full max-w-sm overflow-hidden rounded-xl" style={{ aspectRatio: "9 / 16" }}>
+                          <video
+                            src={section.video}
+                            title={section.title}
+                            className="h-full w-full object-cover"
+                            controls
+                            playsInline
+                            preload="metadata"
+                          />
+                        </div>
+                      </div>
+                    ) : section.linkUrl ? (
+                      <div className="flex h-56 items-center justify-center bg-stone-100 px-5 text-center">
+                        <a
+                          href={section.linkUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-2 rounded-full border border-stone-700 px-5 py-2 text-xs uppercase tracking-[0.14em] text-stone-700 transition-colors duration-300 hover:border-pomegranate hover:bg-pomegranate hover:text-white"
+                        >
+                          {section.linkLabel || "View Link"}
+                          <ArrowUpRight size={14} />
+                        </a>
+                      </div>
+                    ) : section.embedUrl ? (
+                      <div className="bg-stone-100 p-4">
+                        <div className="relative mx-auto w-full max-w-sm overflow-hidden rounded-xl" style={{ aspectRatio: "9 / 16" }}>
+                          <iframe
+                            src={section.embedUrl}
+                            title={section.title}
+                            className="absolute inset-0 h-full w-full border-0"
+                            allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                            allowFullScreen
+                          />
+                        </div>
+                      </div>
+                    ) : section.file ? (
+                      <div className="flex h-56 items-center justify-center bg-stone-100 px-5 text-center">
+                        <a
+                          href={section.file}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-2 rounded-full border border-stone-700 px-5 py-2 text-xs uppercase tracking-[0.14em] text-stone-700 transition-colors duration-300 hover:border-pomegranate hover:bg-pomegranate hover:text-white"
+                        >
+                          Open PDF
+                          <ArrowUpRight size={14} />
+                        </a>
+                      </div>
+                    ) : hasDescription ? (
+                      <SectionDescription
+                        paragraphs={sectionDescriptionParagraphs}
+                        className="min-h-56 bg-stone-50 px-5 py-6"
+                        logo={section.logo}
+                        logoAlt={section.logoAlt}
+                        logos={section.logos}
+                      />
+                    ) : (
+                      <div className="flex h-56 items-center justify-center bg-stone-100 px-5 text-center text-sm uppercase tracking-[0.1em] text-stone-500">
+                        Blank Document
+                      </div>
+                    )}
+                    {hasDescription && hasPrimaryDisplayMedia ? (
+                      <SectionDescription paragraphs={sectionDescriptionParagraphs} className="border-t border-stone-200 px-5 py-4" />
+                    ) : null}
+                    {hasBottomMedia ? (
+                      <div className={hasDescription || hasPrimaryDisplayMedia ? "border-t border-stone-200" : ""}>
+                        <PortfolioMediaCarousel
+                          items={sectionBottomMediaItems}
+                          title={section.bottomMediaTitle || section.title || "Portfolio media"}
+                          advanceVideosOnEnd={section.bottomMediaAdvanceVideosOnEnd}
+                        />
+                      </div>
+                    ) : null}
+                    {section.linkUrl && hasAnyDisplayMedia ? (
+                      <div className="border-t border-stone-200 px-5 py-4">
+                        <div className="flex flex-wrap gap-3">
+                          <a
+                            href={section.linkUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-2 rounded-full border border-stone-700 px-5 py-2 text-xs uppercase tracking-[0.14em] text-stone-700 transition-colors duration-300 hover:border-pomegranate hover:bg-pomegranate hover:text-white"
+                          >
+                            {section.title === "Follow my Instagram" ? <Instagram size={14} /> : null}
+                            {section.linkLabel || "View Link"}
+                            <ArrowUpRight size={14} />
+                          </a>
+                          {section.secondaryLinkUrl ? (
+                            <a
+                              href={section.secondaryLinkUrl}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="inline-flex items-center gap-2 rounded-full border border-stone-700 px-5 py-2 text-xs uppercase tracking-[0.14em] text-stone-700 transition-colors duration-300 hover:border-pomegranate hover:bg-pomegranate hover:text-white"
+                            >
+                              {section.secondaryLinkLabel || "Visit Website"}
+                              <ArrowUpRight size={14} />
+                            </a>
+                          ) : null}
+                        </div>
+                      </div>
+                    ) : null}
+                  </article>
+                );
+              })}
+            </div>
+          </div>
+        ) : null}
+
+        {page.reviews ? (
+          <div className="mt-16 border-t border-stone-200 pt-16">
+            <ClientReviewsSection
+              reviews={page.reviews}
+              kicker={page.reviewsKicker}
+              title={page.reviewsTitle}
+              description={page.reviewsDescription}
+              standalone={false}
+            />
+          </div>
+        ) : null}
       </div>
     </section>
   );

@@ -9,6 +9,30 @@
     />
     <meta name="theme-color" content="#8a2226" />
     <script>
+      (() => {
+        const params = new URLSearchParams(window.location.search);
+        const route = params.get("route");
+
+        if (!route) {
+          return;
+        }
+
+        const search = params.get("search");
+        const hash = params.get("hash");
+        const basePath = window.location.pathname.replace(/\/$/, "");
+        let nextUrl = `${basePath}${route.startsWith("/") ? route : `/${route}`}`;
+
+        if (search) {
+          nextUrl += `?${search}`;
+        }
+
+        if (hash) {
+          nextUrl += `#${hash}`;
+        }
+
+        window.history.replaceState(null, "", nextUrl);
+      })();
+
       const themeColorMeta = document.querySelector('meta[name="theme-color"]');
 
       if (themeColorMeta) {

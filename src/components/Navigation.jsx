@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Menu, X } from "lucide-react";
+import { getCurrentRoutePath, withBasePath } from "../utils/routing";
 
 const THEME_COLOR = "#8a2226";
 
@@ -19,7 +20,7 @@ export default function Navigation({ navLinks }) {
   const navRef = useRef(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(() => {
-    const pathname = window.location.pathname.replace(/\/+$/, "") || "/";
+    const pathname = getCurrentRoutePath();
     return pathname !== "/";
   });
 
@@ -94,7 +95,10 @@ export default function Navigation({ navLinks }) {
   return (
     <nav ref={navRef} className={`fixed left-0 top-0 z-50 w-full transition-all duration-300 ${navShellClass}`}>
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        <a href="/" className={`brand-signature text-4xl leading-none transition-colors duration-300 ${brandClass}`}>
+        <a
+          href={withBasePath("/")}
+          className={`brand-signature text-4xl leading-none transition-colors duration-300 ${brandClass}`}
+        >
           Maddie Stanford
         </a>
 
@@ -102,7 +106,7 @@ export default function Navigation({ navLinks }) {
           {navLinks.map((link) =>
             link.children ? (
               <div key={link.label} className="group relative">
-                <a href={link.href} className={`relative transition-colors duration-300 ${desktopLinkClass}`}>
+                <a href={withBasePath(link.href)} className={`relative transition-colors duration-300 ${desktopLinkClass}`}>
                   {link.label}
                   <span
                     className={`absolute -bottom-1 left-0 h-px w-0 transition-all duration-300 group-hover:w-full ${underlineClass}`}
@@ -115,7 +119,7 @@ export default function Navigation({ navLinks }) {
                       {link.children.map((childLink) => (
                         <a
                           key={childLink.label}
-                          href={childLink.href}
+                          href={withBasePath(childLink.href)}
                           className={`rounded px-3 py-2 transition-colors duration-300 ${dropdownItemClass}`}
                         >
                           {childLink.label}
@@ -128,7 +132,7 @@ export default function Navigation({ navLinks }) {
             ) : (
               <a
                 key={link.label}
-                href={link.href}
+                href={withBasePath(link.href)}
                 className={`group relative transition-colors duration-300 ${desktopLinkClass}`}
               >
                 {link.label}
@@ -163,7 +167,7 @@ export default function Navigation({ navLinks }) {
             link.children ? (
               <div key={link.label} className="space-y-3">
                 <a
-                  href={link.href}
+                  href={withBasePath(link.href)}
                   className="block text-lg uppercase tracking-widest"
                   onClick={() => setIsMenuOpen(false)}
                 >
@@ -173,7 +177,7 @@ export default function Navigation({ navLinks }) {
                   {link.children.map((childLink) => (
                     <a
                       key={childLink.label}
-                      href={childLink.href}
+                      href={withBasePath(childLink.href)}
                       className={`text-sm tracking-wider transition-colors duration-300 ${mobileChildClass}`}
                       onClick={() => setIsMenuOpen(false)}
                     >
@@ -185,7 +189,7 @@ export default function Navigation({ navLinks }) {
             ) : (
               <a
                 key={link.label}
-                href={link.href}
+                href={withBasePath(link.href)}
                 className="text-lg uppercase tracking-widest"
                 onClick={() => setIsMenuOpen(false)}
               >
