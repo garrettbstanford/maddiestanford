@@ -145,7 +145,7 @@ export default function Navigation({ navLinks }) {
         </div>
 
         <a
-          href="mailto:hello@maddiestanford.com"
+          href="mailto:madleestan@gmail.com"
           className={`hidden text-sm font-medium uppercase tracking-wider transition-opacity md:block ${contactClass}`}
         >
           Contact
@@ -198,7 +198,7 @@ export default function Navigation({ navLinks }) {
             )
           )}
           <a
-            href="mailto:hello@maddiestanford.com"
+            href="mailto:madleestan@gmail.com"
             className={`text-lg uppercase tracking-widest ${mobileContactClass}`}
             onClick={() => setIsMenuOpen(false)}
           >

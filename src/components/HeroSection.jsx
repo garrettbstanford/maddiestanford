@@ -2,7 +2,9 @@ import { ArrowRight } from "lucide-react";
 import mainHeroPhoto from "../assets/main-hero.jpg";
 import { withBasePath } from "../utils/routing";
 
-const heroPerimeterLabel = Array(8).fill("EVENT PROFESSIONAL • FLORIST").join(" • ");
+const heroPerimeterLabel = Array(4)
+  .fill("CORPORATE EVENT PROFESSIONAL • FLORIST • WEDDING COORDINATOR • COMMUNITY LEADER • EVENT PROFESSIONAL")
+  .join(" • ");
 
 export default function HeroSection() {
   return (
@@ -16,12 +18,12 @@ export default function HeroSection() {
             style={{ transitionDelay: "0.1s" }}
           >
             <span className="block">Designing & creating</span>
-            <span className="hero-bloom-phrase">experinces that bloom</span>
+            <span className="hero-bloom-phrase">experiences that bloom</span>
           </h1>
 
           <p className="mt-6 max-w-2xl text-[1.27rem] leading-relaxed text-stone-700 md:text-[1.45rem]">
             Hi there! I'm Maddie, an event professional and floral artist. I am dedicated to bringing exceptional
-            corporate visions, community gatherings, and unforgettable experinces to life.
+            corporate visions, community gatherings, and unforgettable experiences to life.
           </p>
 
           <div className="reveal mt-12 flex translate-y-8 flex-col gap-6 opacity-0 sm:flex-row" style={{ transitionDelay: "0.3s" }}>

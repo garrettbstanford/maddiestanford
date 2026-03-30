@@ -18,7 +18,7 @@ export default function ContactSection() {
         </h2>
 
         <a
-          href="mailto:hello@maddiestanford.com"
+          href="mailto:madleestan@gmail.com"
           className="reveal inline-flex translate-y-8 items-center space-x-4 rounded-full bg-white px-10 py-5 text-stone-900 opacity-0 transition-all duration-500 hover:bg-pomegranate hover:text-white"
           style={{ transitionDelay: "0.2s" }}
         >

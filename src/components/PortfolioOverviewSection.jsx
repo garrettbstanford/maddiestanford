@@ -22,7 +22,14 @@ export default function PortfolioOverviewSection() {
               className="reveal overflow-hidden border border-stone-200 bg-white translate-y-8 opacity-0"
               style={{ transitionDelay: `${index * 0.08}s` }}
             >
-              <img src={project.image} alt={project.alt} className="aspect-[16/10] w-full object-cover" loading="lazy" />
+              <div className={`flex aspect-[16/10] items-center justify-center ${project.imageFit === "contain" ? "bg-stone-50 p-6 md:p-10" : ""}`}>
+                <img
+                  src={project.image}
+                  alt={project.alt}
+                  className={`h-full w-full ${project.imageFit === "contain" ? "object-contain" : "object-cover"}`}
+                  loading="lazy"
+                />
+              </div>
 
               <div className="p-6 md:p-8">
                 <p className="text-xs uppercase tracking-[0.2em] text-pomegranate">{project.subtitle}</p>

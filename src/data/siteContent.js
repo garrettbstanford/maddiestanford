@@ -6,6 +6,10 @@ import timeline1 from "../assets/timeline1.png";
 import timeline2 from "../assets/timeline2.png";
 import timeline3 from "../assets/timeline3.png";
 import beesLogo from "../../Bees Logo.png";
+import cwa11 from "../../CWA 11.png";
+import cwaLogo from "../../CWA Logo.png";
+import pomLogo from "../../Pom Logo 3.png";
+import roseGoldLogo from "../../Rose+Gold+logo.webp";
 import runtasticLogo from "../../Runtastic-Logo.png";
 import provoRecLogo from "../../ProvoRecLogo.png";
 import lightTheWorldLogo from "../../Light-the-World-Giving-Machines-Logo.png";
@@ -44,19 +48,22 @@ export const services = [
 
 export const clientReviews = [
   {
-    quote: "Add a short testimonial here about the floral design process, communication, or final result.",
-    name: "Client Name",
-    context: "Wedding Floral Design"
+    quote:
+      "Sample testimonial: The floral direction felt elevated from the very beginning. Every stem, color choice, and finishing detail worked together beautifully, and the final bouquet looked even better in person than it did on the mood board.",
+    name: "Sample Bride",
+    context: "Example wedding floral review"
   },
   {
-    quote: "Add a review here that speaks to the installation experience, execution, or overall atmosphere.",
-    name: "Client Name",
-    context: "Floral Installation"
+    quote:
+      "Sample testimonial: The installation completely changed the atmosphere of the space. It felt polished, intentional, and high-end, and the process stayed organized and calm even with a tight timeline and a lot of moving parts.",
+    name: "Sample Venue Partner",
+    context: "Example floral installation review"
   },
   {
-    quote: "Add a note here from a client or collaborator about freelancing support, creativity, or attention to detail.",
-    name: "Client Name",
-    context: "Freelance Floral Work"
+    quote:
+      "Sample testimonial: Maddie brought both creativity and reliability to the project. She was thoughtful with design choices, easy to collaborate with, and consistently attentive to the little details that make an arrangement feel refined.",
+    name: "Sample Floral Collaborator",
+    context: "Example freelance floral review"
   }
 ];
 
@@ -64,8 +71,9 @@ export const portfolioProjects = [
   {
     title: "Corporate",
     subtitle: "Brand & Executive Events",
-    image: corporatePic,
-    alt: "Modern corporate gala with floral staging",
+    image: cwaLogo,
+    alt: "CWA logo",
+    imageFit: "contain",
     summary:
       "Executive retreats, launch events, keynote experiences, and hospitality programs crafted for brand clarity and guest impact.",
     href: "/portfolio/corporate",
@@ -76,9 +84,9 @@ export const portfolioProjects = [
   {
     title: "Community",
     subtitle: "Cultural & Local Gatherings",
-    image:
-      "https://images.unsplash.com/photo-1596436854581-22874136412f?auto=format&fit=crop&q=80",
-    alt: "Community event floral bouquet",
+    image: beesLogo,
+    alt: "Salt Lake Bees logo",
+    imageFit: "contain",
     summary:
       "Neighborhood activations, nonprofit programs, and cultural events built around warmth, flow, and meaningful connection.",
     href: "/portfolio/community",
@@ -89,11 +97,11 @@ export const portfolioProjects = [
   {
     title: "Weddings",
     subtitle: "Ceremony & Reception Design",
-    image:
-      "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&q=80",
-    alt: "Wedding dinner tablescape",
+    image: roseGoldLogo,
+    alt: "Rose + Gold logo",
+    imageFit: "contain",
     summary:
-      "Ceremony-to-reception storytelling with floral installs, table design, and seamless transitions throughout the day.",
+      "Ceremony-to-reception storytelling with floral installations, table design, and seamless transitions throughout the day.",
     href: "/portfolio/weddings",
     classes: "md:col-span-5 aspect-[3/4] md:-mt-20",
     delay: "0s",
@@ -102,9 +110,9 @@ export const portfolioProjects = [
   {
     title: "Floral Business",
     subtitle: "Retail & Studio Collaborations",
-    image:
-      "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&q=80",
-    alt: "Floral business installation",
+    image: pomLogo,
+    alt: "Pomegranate Pom logo",
+    imageFit: "contain",
     summary:
       "Editorial shoots, retail partnerships, and long-term floral direction that helps businesses express a distinct point of view.",
     href: "/portfolio/floral-business",
@@ -118,38 +126,36 @@ export const portfolioPages = {
   "/portfolio/corporate": {
     kicker: "Portfolio / Corporate",
     title: "Corporate",
-    skills: [
-      "Timeline Development",
-      "Vendor Coordination",
-      "Budget Management",
-      "Run of Show Planning",
-      "Client Communication",
-      "On-Site Execution",
-      "Stakeholder Alignment",
-      "Contract Negotiation",
-      "Venue Logistics",
-      "Team Training",
-      "Risk & Contingency Planning"
-    ],
     image:
       "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&q=80",
     highlights: ["Executive Retreats", "Brand Activations", "Conference Styling"],
-    sections: ["ABAM 2026", "CWA Summitt 2026", "Own Your Shift Event Series"],
+    sections: ["ABAM 2026", "CWA Summit 2026"],
+    stackMediaSections: true,
+    mediaHeading: "The American-Brazilian Aesthetic Meeting",
     mediaSections: [
       {
+        sectionDescriptionParagraphs: [
+          "During the 18th annual American-Brazilian Aesthetic Meeting (ABAM) 2026 in Park City, Utah, I supported on-site event execution for a globally recognized conference that brought together leading professionals in aesthetic medicine and surgery. The multi-day event featured over 100 expert presentations, hands-on learning sessions, and international attendees, requiring precise coordination and adaptability to maintain a seamless guest experience. Throughout the event, I contributed across multiple operational areas including registration, volunteer coordination, and event setup, ensuring attendees, speakers, and staff were supported in a fast-paced, high-expectation environment.",
+          "On Friday, February 6th, I was entrusted with managing the run of show for the Non-Surgical Track in the White Pine Ballroom. In this role, I actively monitored session timing and adjusted in real time to speaker delays, no-shows, and schedule fluctuations. Balancing these variables required constant communication, quick decision-making, and attention to detail to keep the program aligned with the overall event schedule. Despite ongoing changes, I successfully ensured the track remained on time, contributing to the professionalism and flow of the conference. This experience strengthened my ability to operate under pressure, manage live programming, and support the execution of large-scale corporate events with precision and adaptability."
+        ],
         title: "ABAM 2026",
+        embedUrl: "https://online.fliphtml5.com/dhqzv/ABAM-26_Exhibitor-Prospectus/",
         description:
-          "Corporate event planning and execution support focused on logistics, guest experience, and smooth on-site coordination."
+          "The non-surgical track I carried out can be found on pages 19-23."
       },
       {
-        title: "CWA Summitt 2026",
-        description:
-          "Cross-functional event operations with an emphasis on communication, timeline management, and polished delivery."
+        sectionHeading: "Climbing Wall Association Summit",
+        sectionDescriptionParagraphs: [
+          "As part of the planning and execution team for the 2026 Climbing Wall Association (CWA) Summit, I contributed to the coordination of one of the indoor climbing industry's premier global conferences and trade shows. The Summit brings together professionals from around the world including gym owners, operators, vendors, and industry leaders for education, networking, and business development. In preparation for the event, I supported a wide range of planning initiatives including coordinating service crew volunteers, conducting outreach to prospective exhibitors and sponsors, and developing social media assets to promote engagement and attendance. I also communicated directly with keynote speakers and assisted in selling the event room block, helping ensure strong participation and a seamless attendee experience leading up to the Summit.",
+          "In addition to pre-event planning, I played a key role in managing logistics and attendee experience at scale. I assisted in organizing transportation for over 600 attendees, responded to ongoing event inquiries, and supported cross-functional communication between stakeholders to keep operations aligned. My involvement required strong attention to detail, proactive problem-solving, and the ability to manage multiple moving pieces simultaneously. Contributing across both planning and execution phases gave me valuable experience in large-scale event operations, reinforcing my ability to support complex events from initial coordination through on-site delivery while maintaining a high standard of professionalism and guest experience. The pictures below are from last year's CWA Summit and this year's program."
+        ],
+        title: "CWA Summit 2026",
+        mediaCollection: "cwa",
+        mediaItemOrder: ["CWA 10", "CWA 3", "CWA 1"]
       },
       {
-        title: "Own Your Shift Event Series",
-        description:
-          "A series-driven event experience shaped around repeatable planning systems, strong hosting, and consistent execution."
+        image: cwa11,
+        alt: "CWA 11"
       }
     ]
   },
@@ -162,9 +168,11 @@ export const portfolioPages = {
       "https://images.unsplash.com/photo-1472653431158-6364773b2a56?auto=format&fit=crop&q=80",
     highlights: ["Fundraisers", "Cultural Events", "Neighborhood Celebrations"],
     mediaHeading: "Experience Highlights",
+    mediaLayout: "split-columns",
     mediaSections: [
       {
-        title: "Salt Lake Bee's - Premium Host",
+        title: "Salt Lake Bees - Premium Host",
+        desktopColumn: "left",
         logo: beesLogo,
         logoAlt: "Salt Lake Bees logo",
         descriptionParagraphs: [
@@ -179,6 +187,7 @@ export const portfolioPages = {
       },
       {
         title: "Volunteer Work",
+        desktopColumn: "right",
         logos: [
           { src: runtasticLogo, alt: "Runtastic logo" },
           { src: provoRecLogo, alt: "Provo Recreation Center logo" },
@@ -197,6 +206,7 @@ export const portfolioPages = {
       },
       {
         title: "Private Event Planner",
+        desktopColumn: "left",
         bottomMediaCollection: "wreath",
         bottomMediaAdvanceVideosOnEnd: true,
         bottomMediaTitle: "Wreath Workshop",
@@ -214,37 +224,42 @@ export const portfolioPages = {
     kicker: "Portfolio / Weddings",
     title: "Weddings",
     description:
-      "Ceremony-to-reception environments with sculptural florals, layered tablescapes, and considered transitions that keep each chapter of the day cohesive.",
+      "From ceremony to reception, each wedding is designed as a cohesive story. Beautiful florals, layered tablescapes, and thoughtful transitions ensure every moment feels intentional and beautifully connected.",
     image:
       "https://images.unsplash.com/photo-1469371670807-013ccf25f16a?auto=format&fit=crop&q=80",
     highlights: ["Ceremony Design", "Reception Styling", "Floral Installations"],
+    mediaHeading: "",
     mediaSections: [
       {
-        title: "Timeline - Annie & Jack",
+        sectionHeading: "Wedding Coordinator Assistant",
+        sectionDescription:
+          "During my time with Michelle Leo Events this past summer, I contributed to 7+ events. Featured here is one example of that work.",
+        title: "Madison & Charlie",
+        video: instagramReelHighlight
+      },
+      {
+        sectionHeading: "Timeline Execution",
+        sectionDescription:
+          "Below is a sample timeline I assisted in executing, designed by the lead planner at Michelle Leo Events. With over 180 guests, 30+ linens, and thoughtfully curated details throughout, the event came together seamlessly to create unforgettable memories.",
+        title: "Annie & Jack",
         image: timeline1,
-        alt: "Timeline 1",
-        description: "This is a small snapshot of a wedding timeline I helped carry out, I had no part in creating this timeline only the execusion. This section outlines the first phase of set up our team carried out."
+        alt: "Timeline 1"
       },
       {
         image: timeline2,
-        alt: "Timeline 2",
-        description: "This was phase two of our setup. Being detail orriented is one of my favorite parts about event planning."
+        alt: "Timeline 2"
       },
       {
         image: timeline3,
-        alt: "Timeline 3",
-        description: "For this event there were over 180 guests, 30+ linens, and endless memories made."
+        alt: "Timeline 3"
       },
       {
-        title: "Wedding Moodboard",
+        sectionHeading: "Wedding Mood Board",
+        sectionDescription:
+          "I created this wedding mood board based on the prompt, \"The sky is the limit.\" My vision blends modern luxury with a sense of extravagance. When designing a mood board, I begin with a strong \"wow\" factor and build outward from there. For this concept, the florals served as the focal point. From there, I curated complementary ideas and cohesive design elements until the entire vision came together seamlessly.",
+        title: "Opulent Bloom",
         image: weddingMoodboardJpg,
-        alt: "Wedding Moodboard",
-        description: "I built this wedding moodboard given the prompt, \"The sky is the limit!\". This is what I dreamt up, a mix of modern luxury and extravagence."
-      },
-      {
-        title: "Luxury Wedding Video",
-        video: instagramReelHighlight,
-        description: "Working as a wedding coordinator assistant for Michelle Leo Events"
+        alt: "Wedding Moodboard"
       }
     ]
   },
@@ -258,16 +273,16 @@ export const portfolioPages = {
     highlights: ["Retail Partnerships", "Editorial Production", "Studio Direction"],
     mediaHeading: "Experience Highlights",
     reviews: clientReviews,
-    reviewsKicker: "Client Reviews",
-    reviewsTitle: "Kind words from past clients",
+    reviewsKicker: "Sample Reviews",
+    reviewsTitle: "Example testimonial style",
     reviewsDescription:
-      "A dedicated space for testimonials from past clients, collaborators, and floral partners.",
+      "These are placeholder examples showing how real client, collaborator, and partner testimonials can be presented once approved quotes are available.",
     mediaSections: [
       {
         title: "Bridal Bouquets",
         mediaCollection: "bridalBouquet",
         description:
-          "Every bridal bouquet begins long before the first stem is placed. It starts with intentional color selection, thoughtful sourcing; often chasing blooms across seasons, and a deep understanding of texture and form. Each flower is chosen with purpose, whether freshly in season or carefully procured from afar. The final step is a delicate composition, where every element is hand-placed to create a one-of-a-kind bouquet designed to be carried once, remembered forever. I hand crafted each of these bouquets."
+          "Every bridal bouquet begins long before the first stem is placed. It starts with intentional color selection, thoughtful sourcing, often chasing blooms across seasons, and a deep understanding of texture and form. Each flower is chosen with purpose, whether freshly in season or carefully procured from afar. The final step is a delicate composition, where every element is hand-placed to create a one-of-a-kind bouquet designed to be carried once and remembered forever. I hand-crafted each of these bouquets."
       },
       {
         title: "Floral Installs",

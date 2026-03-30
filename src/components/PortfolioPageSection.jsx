@@ -1,7 +1,6 @@
-import { useEffect, useRef, useState } from "react";
-import { ArrowUpRight, Instagram } from "lucide-react";
+import { Fragment, useEffect, useRef, useState } from "react";
+import { ArrowUpRight, Instagram, Volume2, VolumeX } from "lucide-react";
 import ClientReviewsSection from "./ClientReviewsSection";
-import volunteer3Jpeg from "../../Volunteer 3.jpeg";
 
 const mediaSort = new Intl.Collator(undefined, {
   numeric: true,
@@ -52,6 +51,14 @@ const volunteerMediaModules = import.meta.glob(
   { eager: true, import: "default" }
 );
 
+const cwaMediaModules = import.meta.glob(
+  [
+    "/CWA *.{avif,gif,heic,jpeg,jpg,m4v,mp4,mov,png,webm,webp,AVIF,GIF,HEIC,JPEG,JPG,M4V,MP4,MOV,PNG,WEBM,WEBP}",
+    "/src/assets/CWA *.{avif,gif,heic,jpeg,jpg,m4v,mp4,mov,png,webm,webp,AVIF,GIF,HEIC,JPEG,JPG,M4V,MP4,MOV,PNG,WEBM,WEBP}"
+  ],
+  { eager: true, import: "default" }
+);
+
 const isSupportedMediaFile = (path) => /\.(avif|gif|heic|jpeg|jpg|m4v|mp4|mov|png|webm|webp)$/i.test(path);
 const isVideoFile = (path) => /\.(mp4|mov|m4v|webm)$/i.test(path);
 const getFileExtension = (path) => path.split(".").pop()?.toLowerCase() || "";
@@ -74,13 +81,9 @@ const freelancingCaptions = {
   "Freelancing 7": "De La Flor",
   "Freelancing 8": "Lily & Iris",
   "Freelancing 9": "Lily & Iris",
-  "Freelancing 10": "Colective Floral",
+  "Freelancing 10": "Collective Floral",
   "Freelancing 11": "De La Flor",
   "Freelancing 12": "Fly High Flora"
-};
-
-const volunteerMediaSourceOverrides = {
-  "Volunteer 3": volunteer3Jpeg
 };
 
 const buildMediaCollection = (mediaModules, captionMap = {}) =>
@@ -118,9 +121,25 @@ const mediaCollections = {
   floralInstall: buildMediaCollection(floralInstallMediaModules),
   freelancing: buildMediaCollection(freelancingMediaModules, freelancingCaptions),
   wreath: buildMediaCollection(wreathMediaModules),
-  volunteer: buildMediaCollection(volunteerMediaModules).map((item) =>
-    volunteerMediaSourceOverrides[item.alt] ? { ...item, src: volunteerMediaSourceOverrides[item.alt] } : item
-  )
+  volunteer: buildMediaCollection(volunteerMediaModules).filter((item) => item.alt !== "Volunteer 3"),
+  cwa: buildMediaCollection(cwaMediaModules)
+    .filter((item) => ["CWA 1", "CWA 3", "CWA 10", "CWA 11"].includes(item.alt))
+    .sort((leftItem, rightItem) => {
+      const order = ["CWA 10", "CWA 11", "CWA 3", "CWA 1"];
+      return order.indexOf(leftItem.alt) - order.indexOf(rightItem.alt);
+    })
+};
+
+const selectMediaItems = (collectionName, mediaItemOrder = []) => {
+  const items = collectionName ? mediaCollections[collectionName] || [] : [];
+
+  if (!mediaItemOrder.length) {
+    return items;
+  }
+
+  const itemsByAlt = new Map(items.map((item) => [item.alt, item]));
+
+  return mediaItemOrder.map((alt) => itemsByAlt.get(alt)).filter(Boolean);
 };
 
 function PortfolioMediaCarousel({ items, title, advanceVideosOnEnd = false }) {
@@ -173,14 +192,14 @@ function PortfolioMediaCarousel({ items, title, advanceVideosOnEnd = false }) {
       <div className="overflow-hidden rounded-xl border border-stone-200 bg-white shadow-sm">
         <div className="overflow-hidden bg-stone-50">
           <div
-            className="flex min-h-[22rem] transition-transform duration-700 will-change-transform"
+            className="flex min-h-[22rem] w-full transition-transform duration-700 will-change-transform"
             style={{
               transform: `translateX(-${activeIndex * 100}%)`,
               transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)"
             }}
           >
             {items.map((item, index) => (
-              <div key={item.src} className="flex w-full shrink-0 flex-col items-center justify-center gap-3 px-3 py-4">
+              <div key={item.src} className="flex min-h-[22rem] w-full min-w-0 shrink-0 flex-col items-center justify-center gap-3 px-3 py-4 md:min-h-[26rem]">
                 {item.type === "video" ? (
                   <video
                     ref={(node) => {
@@ -188,7 +207,7 @@ function PortfolioMediaCarousel({ items, title, advanceVideosOnEnd = false }) {
                     }}
                     src={item.src}
                     title={`${title} ${item.alt || "video"}`}
-                    className="max-h-[34rem] w-full object-contain"
+                    className="block max-h-[42rem] w-auto max-w-full object-contain"
                     muted
                     loop={!advanceVideosOnEnd}
                     playsInline
@@ -202,7 +221,7 @@ function PortfolioMediaCarousel({ items, title, advanceVideosOnEnd = false }) {
                     }}
                   />
                 ) : (
-                  <img src={item.src} alt={`${title} ${item.alt || "photo"}`} className="max-h-[34rem] w-full object-contain" />
+                  <img src={item.src} alt={`${title} ${item.alt || "photo"}`} className="block h-auto w-auto max-w-full object-contain" />
                 )}
                 {item.caption ? <p className="text-sm uppercase tracking-[0.14em] text-stone-600">{item.caption}</p> : null}
               </div>
@@ -231,6 +250,50 @@ function PortfolioMediaCarousel({ items, title, advanceVideosOnEnd = false }) {
             </div>
           </div>
         ) : null}
+      </div>
+    </div>
+  );
+}
+
+function PortfolioVideoBlock({ src, title }) {
+  const videoRef = useRef(null);
+  const [isMuted, setIsMuted] = useState(true);
+
+  useEffect(() => {
+    const video = videoRef.current;
+
+    if (!video) {
+      return;
+    }
+
+    video.muted = isMuted;
+    video.defaultMuted = isMuted;
+    video.play().catch(() => {});
+  }, [isMuted, src]);
+
+  return (
+    <div className="bg-stone-100 p-4">
+      <div className="relative mx-auto w-full max-w-sm overflow-hidden rounded-xl" style={{ aspectRatio: "9 / 16" }}>
+        <video
+          ref={videoRef}
+          src={src}
+          title={title}
+          className="h-full w-full object-cover"
+          autoPlay
+          loop
+          muted={isMuted}
+          playsInline
+          preload="metadata"
+        />
+        <button
+          type="button"
+          onClick={() => setIsMuted((current) => !current)}
+          className="absolute bottom-3 right-3 inline-flex items-center gap-2 rounded-full bg-stone-900/80 px-4 py-2 text-xs uppercase tracking-[0.14em] text-white transition-colors duration-300 hover:bg-pomegranate"
+          aria-label={isMuted ? `Unmute ${title}` : `Mute ${title}`}
+        >
+          {isMuted ? <VolumeX size={14} /> : <Volume2 size={14} />}
+          {isMuted ? "Unmute" : "Mute"}
+        </button>
       </div>
     </div>
   );
@@ -266,6 +329,199 @@ function SectionDescription({ paragraphs, className, logo, logoAlt, logos = [] }
 
 export default function PortfolioPageSection({ page }) {
   const isWeddingPage = page?.title === "Weddings";
+  const shouldStackMediaSections = Boolean(page?.stackMediaSections);
+  const usesSplitMediaColumns = page?.mediaLayout === "split-columns";
+  const mediaHeading = page.mediaHeading === undefined ? "Document Sections" : page.mediaHeading;
+
+  const renderMediaSection = (section, index) => {
+    const sectionMediaItems = selectMediaItems(section.mediaCollection, section.mediaItemOrder);
+    const sectionBottomMediaItems = section.bottomMediaCollection ? mediaCollections[section.bottomMediaCollection] || [] : [];
+    const sectionIntroParagraphs = section.sectionDescriptionParagraphs?.length
+      ? section.sectionDescriptionParagraphs
+      : section.sectionDescription
+        ? [section.sectionDescription]
+        : [];
+    const sectionDescriptionParagraphs = section.descriptionParagraphs?.length
+      ? section.descriptionParagraphs
+      : section.description
+        ? [section.description]
+        : [];
+    const hasDescription = sectionDescriptionParagraphs.length > 0;
+    const hasPrimaryDisplayMedia =
+      sectionMediaItems.length > 0 || section.image || section.video || section.linkUrl || section.embedUrl || section.file;
+    const hasBottomMedia = sectionBottomMediaItems.length > 0;
+    const hasAnyDisplayMedia = hasPrimaryDisplayMedia || hasBottomMedia;
+
+    return (
+      <Fragment key={`${section.title || "section"}-${index}`}>
+        {section.sectionHeading || sectionIntroParagraphs.length ? (
+          <div className="col-span-full mt-2 space-y-3">
+            {section.sectionHeading ? (
+              <h2 className="text-sm uppercase tracking-[0.2em] text-stone-700 md:text-base">{section.sectionHeading}</h2>
+            ) : null}
+            {sectionIntroParagraphs.map((paragraph, paragraphIndex) => (
+              <p key={`${section.title || "section"}-intro-${paragraphIndex}`} className="max-w-5xl text-base leading-relaxed text-stone-600 md:text-lg">
+                {paragraph}
+              </p>
+            ))}
+          </div>
+        ) : null}
+        <article className="self-start w-full overflow-hidden rounded-2xl border border-stone-200 bg-white">
+          {section.title ? (
+            <h3 className="border-b border-stone-200 px-5 py-3 text-sm uppercase tracking-[0.12em] text-stone-700 md:text-base">
+              {section.title}
+            </h3>
+          ) : null}
+          {sectionMediaItems.length > 0 ? (
+            <PortfolioMediaCarousel
+              items={sectionMediaItems}
+              title={section.title || "Portfolio media"}
+              advanceVideosOnEnd={section.advanceVideosOnEnd}
+            />
+          ) : section.image ? (
+            <div className="flex min-h-[18rem] items-center justify-center bg-stone-50 p-4 md:min-h-[24rem]">
+              <img
+                src={section.image}
+                alt={section.alt || `${section.title} preview`}
+                className="block max-h-[42rem] w-auto max-w-full object-contain"
+              />
+            </div>
+          ) : section.video ? (
+            <PortfolioVideoBlock src={section.video} title={section.title || "Portfolio video"} />
+          ) : section.linkUrl ? (
+            <div className="flex h-56 items-center justify-center bg-stone-100 px-5 text-center">
+              <a
+                href={section.linkUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 rounded-full border border-stone-700 px-5 py-2 text-xs uppercase tracking-[0.14em] text-stone-700 transition-colors duration-300 hover:border-pomegranate hover:bg-pomegranate hover:text-white"
+              >
+                {section.linkLabel || "View Link"}
+                <ArrowUpRight size={14} />
+              </a>
+            </div>
+          ) : section.embedUrl ? (
+            <div className="bg-stone-100 p-4">
+              <div className="relative mx-auto w-full max-w-5xl overflow-hidden rounded-xl" style={{ aspectRatio: "16 / 10" }}>
+                <iframe
+                  src={section.embedUrl}
+                  title={section.title}
+                  className="absolute inset-0 h-full w-full border-0"
+                  allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                  allowFullScreen
+                />
+              </div>
+            </div>
+          ) : section.file ? (
+            <div className="flex h-56 items-center justify-center bg-stone-100 px-5 text-center">
+              <a
+                href={section.file}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 rounded-full border border-stone-700 px-5 py-2 text-xs uppercase tracking-[0.14em] text-stone-700 transition-colors duration-300 hover:border-pomegranate hover:bg-pomegranate hover:text-white"
+              >
+                Open PDF
+                <ArrowUpRight size={14} />
+              </a>
+            </div>
+          ) : hasDescription ? (
+            <SectionDescription
+              paragraphs={sectionDescriptionParagraphs}
+              className="min-h-56 bg-stone-50 px-5 py-6"
+              logo={section.logo}
+              logoAlt={section.logoAlt}
+              logos={section.logos}
+            />
+          ) : (
+            <div className="flex h-56 items-center justify-center bg-stone-100 px-5 text-center text-sm uppercase tracking-[0.1em] text-stone-500">
+              Blank Document
+            </div>
+          )}
+          {hasDescription && hasPrimaryDisplayMedia ? (
+            <SectionDescription paragraphs={sectionDescriptionParagraphs} className="border-t border-stone-200 px-5 py-4" />
+          ) : null}
+          {hasBottomMedia ? (
+            <div className={hasDescription || hasPrimaryDisplayMedia ? "border-t border-stone-200" : ""}>
+              <PortfolioMediaCarousel
+                items={sectionBottomMediaItems}
+                title={section.bottomMediaTitle || section.title || "Portfolio media"}
+                advanceVideosOnEnd={section.bottomMediaAdvanceVideosOnEnd}
+              />
+            </div>
+          ) : null}
+          {section.linkUrl && hasAnyDisplayMedia ? (
+            <div className="border-t border-stone-200 px-5 py-4">
+              <div className="flex flex-wrap gap-3">
+                <a
+                  href={section.linkUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full border border-stone-700 px-5 py-2 text-xs uppercase tracking-[0.14em] text-stone-700 transition-colors duration-300 hover:border-pomegranate hover:bg-pomegranate hover:text-white"
+                >
+                  {section.title === "Follow my Instagram" ? <Instagram size={14} /> : null}
+                  {section.linkLabel || "View Link"}
+                  <ArrowUpRight size={14} />
+                </a>
+                {section.secondaryLinkUrl ? (
+                  <a
+                    href={section.secondaryLinkUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 rounded-full border border-stone-700 px-5 py-2 text-xs uppercase tracking-[0.14em] text-stone-700 transition-colors duration-300 hover:border-pomegranate hover:bg-pomegranate hover:text-white"
+                  >
+                    {section.secondaryLinkLabel || "Visit Website"}
+                    <ArrowUpRight size={14} />
+                  </a>
+                ) : null}
+              </div>
+            </div>
+          ) : null}
+        </article>
+      </Fragment>
+    );
+  };
+
+  const renderMediaSections = () => {
+    if (usesSplitMediaColumns) {
+      const leftColumnSections = [];
+      const rightColumnSections = [];
+
+      page.mediaSections.forEach((section, index) => {
+        const renderedSection = renderMediaSection(section, index);
+
+        if (section.desktopColumn === "right") {
+          rightColumnSections.push(renderedSection);
+          return;
+        }
+
+        leftColumnSections.push(renderedSection);
+      });
+
+      return (
+        <>
+          <div className="mt-4 space-y-6 lg:hidden">{page.mediaSections.map(renderMediaSection)}</div>
+          <div className="mt-4 hidden gap-6 lg:grid lg:grid-cols-2 lg:items-start">
+            <div className="flex flex-col gap-6">{leftColumnSections}</div>
+            <div className="flex flex-col gap-6">{rightColumnSections}</div>
+          </div>
+        </>
+      );
+    }
+
+    return (
+      <div
+        className={`mt-4 grid gap-6 ${
+          isWeddingPage
+            ? "mx-auto max-w-5xl grid-cols-1"
+            : shouldStackMediaSections
+              ? "mx-auto max-w-5xl grid-cols-1"
+              : "lg:grid-cols-2 lg:grid-rows-2"
+        }`}
+      >
+        {page.mediaSections.map(renderMediaSection)}
+      </div>
+    );
+  };
 
   return (
     <section className="relative min-h-screen overflow-hidden bg-white">
@@ -301,7 +557,7 @@ export default function PortfolioPageSection({ page }) {
         ) : null}
 
         <a
-          href="mailto:hello@maddiestanford.com"
+          href="mailto:madleestan@gmail.com"
           className="reveal mt-10 inline-flex translate-y-8 items-center gap-3 rounded-full border border-stone-900 px-7 py-3 text-xs uppercase tracking-[0.2em] text-stone-900 opacity-0 transition-colors duration-300 hover:border-pomegranate hover:bg-pomegranate hover:text-white"
           style={{ transitionDelay: "0.2s" }}
         >
@@ -311,149 +567,11 @@ export default function PortfolioPageSection({ page }) {
 
         {page.mediaSections ? (
           <div className="reveal mt-10 translate-y-8 opacity-0" style={{ transitionDelay: "0.18s" }}>
-            <h2 className="text-sm uppercase tracking-[0.2em] text-stone-700 md:text-base">{page.mediaHeading || "Document Sections"}</h2>
-            <div className={`mt-4 grid gap-6 ${isWeddingPage ? "mx-auto max-w-3xl grid-cols-1" : "lg:grid-cols-2 lg:grid-rows-2"}`}>
-              {page.mediaSections.map((section, index) => {
-                const sectionMediaItems = section.mediaCollection ? mediaCollections[section.mediaCollection] || [] : [];
-                const sectionBottomMediaItems = section.bottomMediaCollection ? mediaCollections[section.bottomMediaCollection] || [] : [];
-                const sectionDescriptionParagraphs = section.descriptionParagraphs?.length
-                  ? section.descriptionParagraphs
-                  : section.description
-                    ? [section.description]
-                    : [];
-                const hasDescription = sectionDescriptionParagraphs.length > 0;
-                const hasPrimaryDisplayMedia =
-                  sectionMediaItems.length > 0 || section.image || section.video || section.linkUrl || section.embedUrl || section.file;
-                const hasBottomMedia = sectionBottomMediaItems.length > 0;
-                const hasAnyDisplayMedia = hasPrimaryDisplayMedia || hasBottomMedia;
-
-                return (
-                  <article
-                    key={`${section.title || "section"}-${index}`}
-                    className={`self-start w-full overflow-hidden rounded-2xl border border-stone-200 bg-white ${
-                      !isWeddingPage && section.title === "CWA Service Crew" ? "lg:col-start-2 lg:row-span-2 lg:row-start-1" : ""
-                    }`}
-                  >
-                    {section.title ? (
-                      <h3 className="border-b border-stone-200 px-5 py-3 text-sm uppercase tracking-[0.12em] text-stone-700 md:text-base">
-                        {section.title}
-                      </h3>
-                    ) : null}
-                    {sectionMediaItems.length > 0 ? (
-                      <PortfolioMediaCarousel
-                        items={sectionMediaItems}
-                        title={section.title || "Portfolio media"}
-                        advanceVideosOnEnd={section.advanceVideosOnEnd}
-                      />
-                    ) : section.image ? (
-                      <div className="bg-stone-50">
-                        <img src={section.image} alt={section.alt || `${section.title} preview`} className="h-auto w-full object-contain" />
-                      </div>
-                    ) : section.video ? (
-                      <div className="bg-stone-100 p-4">
-                        <div className="relative mx-auto w-full max-w-sm overflow-hidden rounded-xl" style={{ aspectRatio: "9 / 16" }}>
-                          <video
-                            src={section.video}
-                            title={section.title}
-                            className="h-full w-full object-cover"
-                            controls
-                            playsInline
-                            preload="metadata"
-                          />
-                        </div>
-                      </div>
-                    ) : section.linkUrl ? (
-                      <div className="flex h-56 items-center justify-center bg-stone-100 px-5 text-center">
-                        <a
-                          href={section.linkUrl}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="inline-flex items-center gap-2 rounded-full border border-stone-700 px-5 py-2 text-xs uppercase tracking-[0.14em] text-stone-700 transition-colors duration-300 hover:border-pomegranate hover:bg-pomegranate hover:text-white"
-                        >
-                          {section.linkLabel || "View Link"}
-                          <ArrowUpRight size={14} />
-                        </a>
-                      </div>
-                    ) : section.embedUrl ? (
-                      <div className="bg-stone-100 p-4">
-                        <div className="relative mx-auto w-full max-w-sm overflow-hidden rounded-xl" style={{ aspectRatio: "9 / 16" }}>
-                          <iframe
-                            src={section.embedUrl}
-                            title={section.title}
-                            className="absolute inset-0 h-full w-full border-0"
-                            allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-                            allowFullScreen
-                          />
-                        </div>
-                      </div>
-                    ) : section.file ? (
-                      <div className="flex h-56 items-center justify-center bg-stone-100 px-5 text-center">
-                        <a
-                          href={section.file}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="inline-flex items-center gap-2 rounded-full border border-stone-700 px-5 py-2 text-xs uppercase tracking-[0.14em] text-stone-700 transition-colors duration-300 hover:border-pomegranate hover:bg-pomegranate hover:text-white"
-                        >
-                          Open PDF
-                          <ArrowUpRight size={14} />
-                        </a>
-                      </div>
-                    ) : hasDescription ? (
-                      <SectionDescription
-                        paragraphs={sectionDescriptionParagraphs}
-                        className="min-h-56 bg-stone-50 px-5 py-6"
-                        logo={section.logo}
-                        logoAlt={section.logoAlt}
-                        logos={section.logos}
-                      />
-                    ) : (
-                      <div className="flex h-56 items-center justify-center bg-stone-100 px-5 text-center text-sm uppercase tracking-[0.1em] text-stone-500">
-                        Blank Document
-                      </div>
-                    )}
-                    {hasDescription && hasPrimaryDisplayMedia ? (
-                      <SectionDescription paragraphs={sectionDescriptionParagraphs} className="border-t border-stone-200 px-5 py-4" />
-                    ) : null}
-                    {hasBottomMedia ? (
-                      <div className={hasDescription || hasPrimaryDisplayMedia ? "border-t border-stone-200" : ""}>
-                        <PortfolioMediaCarousel
-                          items={sectionBottomMediaItems}
-                          title={section.bottomMediaTitle || section.title || "Portfolio media"}
-                          advanceVideosOnEnd={section.bottomMediaAdvanceVideosOnEnd}
-                        />
-                      </div>
-                    ) : null}
-                    {section.linkUrl && hasAnyDisplayMedia ? (
-                      <div className="border-t border-stone-200 px-5 py-4">
-                        <div className="flex flex-wrap gap-3">
-                          <a
-                            href={section.linkUrl}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="inline-flex items-center gap-2 rounded-full border border-stone-700 px-5 py-2 text-xs uppercase tracking-[0.14em] text-stone-700 transition-colors duration-300 hover:border-pomegranate hover:bg-pomegranate hover:text-white"
-                          >
-                            {section.title === "Follow my Instagram" ? <Instagram size={14} /> : null}
-                            {section.linkLabel || "View Link"}
-                            <ArrowUpRight size={14} />
-                          </a>
-                          {section.secondaryLinkUrl ? (
-                            <a
-                              href={section.secondaryLinkUrl}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="inline-flex items-center gap-2 rounded-full border border-stone-700 px-5 py-2 text-xs uppercase tracking-[0.14em] text-stone-700 transition-colors duration-300 hover:border-pomegranate hover:bg-pomegranate hover:text-white"
-                            >
-                              {section.secondaryLinkLabel || "Visit Website"}
-                              <ArrowUpRight size={14} />
-                            </a>
-                          ) : null}
-                        </div>
-                      </div>
-                    ) : null}
-                  </article>
-                );
-              })}
-            </div>
+            {mediaHeading ? <h2 className="text-sm uppercase tracking-[0.2em] text-stone-700 md:text-base">{mediaHeading}</h2> : null}
+            {page.mediaDescription ? (
+              <p className="mt-3 max-w-3xl text-base leading-relaxed text-stone-600 md:text-lg">{page.mediaDescription}</p>
+            ) : null}
+            {renderMediaSections()}
           </div>
         ) : null}
 
