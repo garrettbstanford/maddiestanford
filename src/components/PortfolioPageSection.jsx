@@ -21,6 +21,7 @@ const floralInstallMediaModules = import.meta.glob(
     "/Instal *.{avif,gif,heic,jpeg,jpg,m4v,mp4,mov,png,webm,webp,AVIF,GIF,HEIC,JPEG,JPG,M4V,MP4,MOV,PNG,WEBM,WEBP}",
     "/Install *.{avif,gif,heic,jpeg,jpg,m4v,mp4,mov,png,webm,webp,AVIF,GIF,HEIC,JPEG,JPG,M4V,MP4,MOV,PNG,WEBM,WEBP}",
     "/Floral Install *.{avif,gif,heic,jpeg,jpg,m4v,mp4,mov,png,webm,webp,AVIF,GIF,HEIC,JPEG,JPG,M4V,MP4,MOV,PNG,WEBM,WEBP}",
+    "/Floral Installs *.{avif,gif,heic,jpeg,jpg,m4v,mp4,mov,png,webm,webp,AVIF,GIF,HEIC,JPEG,JPG,M4V,MP4,MOV,PNG,WEBM,WEBP}",
     "/src/assets/Instal *.{avif,gif,heic,jpeg,jpg,m4v,mp4,mov,png,webm,webp,AVIF,GIF,HEIC,JPEG,JPG,M4V,MP4,MOV,PNG,WEBM,WEBP}"
   ],
   { eager: true, import: "default" }
@@ -116,9 +117,42 @@ const buildMediaCollection = (mediaModules, captionMap = {}) =>
       }, new Map()).values()
   ).map(({ extension, ...item }) => item);
 
+const prioritizeMediaItems = (items, preferredOrder = []) => {
+  if (!preferredOrder.length) {
+    return items;
+  }
+
+  const preferredIndex = new Map(preferredOrder.map((alt, index) => [alt, index]));
+
+  return [...items].sort((leftItem, rightItem) => {
+    const leftPreferredIndex = preferredIndex.get(leftItem.alt);
+    const rightPreferredIndex = preferredIndex.get(rightItem.alt);
+    const leftIsPreferred = leftPreferredIndex !== undefined;
+    const rightIsPreferred = rightPreferredIndex !== undefined;
+
+    if (leftIsPreferred && rightIsPreferred) {
+      return leftPreferredIndex - rightPreferredIndex;
+    }
+
+    if (leftIsPreferred) {
+      return -1;
+    }
+
+    if (rightIsPreferred) {
+      return 1;
+    }
+
+    return 0;
+  });
+};
+
 const mediaCollections = {
   bridalBouquet: buildMediaCollection(bridalBouquetMediaModules),
-  floralInstall: buildMediaCollection(floralInstallMediaModules),
+  floralInstall: prioritizeMediaItems(buildMediaCollection(floralInstallMediaModules), [
+    "Floral Installs pc",
+    "Floral Install 3",
+    "Floral Install pic 2"
+  ]),
   freelancing: buildMediaCollection(freelancingMediaModules, freelancingCaptions),
   wreath: buildMediaCollection(wreathMediaModules),
   volunteer: buildMediaCollection(volunteerMediaModules).filter((item) => item.alt !== "Volunteer 3"),
